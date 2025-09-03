@@ -209,7 +209,7 @@ class mainWindow:
 
         # my account
         myBtn = tk.Button(self.root, text="MY ACCOUNT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.bt)
+        cursor="hand2", command=self.account)
         myBtn.place(x=10, y=15)
 
         # log out
@@ -246,8 +246,18 @@ class mainWindow:
     # COMMAND FOR EACH BUTTON
 
     # my account button
-    def acc(self):
-        pass
+    def account(self):
+        
+        self.acc = tk.Tk()
+
+        # geometry
+        self.acc.geometry("600x600")
+        self.acc.maxsize(600, 600)
+        self.acc.minsize(600, 600)
+        self.acc.config(background="#fff5e6")
+
+
+        
 
     # log out button
     def logout(self):
@@ -263,7 +273,9 @@ class mainWindow:
     # Booking Button
     def bt(self):
 
-        tk.Label(self.f2, text="Booking Ticket Choose Stations", font="lucida 20 bold", background="#ffdab9").place(x=370, y=10)
+        tk.Label(self.f2, text="BOOK TICKET", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
+
+        pass
 
         
 
