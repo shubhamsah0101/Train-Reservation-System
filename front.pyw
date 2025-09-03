@@ -7,8 +7,10 @@ import mysql.connector as con
 con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
 cur1 = con1.cursor()
 
+# class for Login/Signup window
 class loginWindow:
 
+    # login/signin window
     def __init__(self, root):
         
         self.root = root
@@ -36,7 +38,7 @@ class loginWindow:
         f1=tk.Frame(root, bd=1, relief="ridge", width=500, height=550, bg="#ffdab9")
         f1.place(x=10, y=25)
 
-        head=tk.Label(f1, text="Log in/ Sign Up", font="lucida 16 bold", bg="#ffdab9", fg="#001f3f")
+        head=tk.Label(f1, text="Log in/ Sign Up", font="lucida 20 bold", bg="#ffdab9", fg="#001f3f")
         head.place(x=150, y=20)
 
         # user id
@@ -50,13 +52,13 @@ class loginWindow:
         self.password.place(x=180, y=255)
 
         # log in button
-        loginBtn = tk.Button(f1, text="Log in", font="licida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", command=self.login)
+        loginBtn = tk.Button(f1, text="Log in", font="licida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.login)
         loginBtn.place(x=180, y=320)
 
         # sign in button
         tk.Label(f1, text="Don't have an Account?\nCreate one!", font="lucida 16 bold",bg="#ffdab9", fg="#006666").place(x=110, y=400)
 
-        signinBtn=tk.Button(f1, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", command=self.signup)
+        signinBtn=tk.Button(f1, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.signup)
         signinBtn.place(x=170, y=480)
 
         # Press 'Enter' key to login from keyboard
@@ -65,7 +67,6 @@ class loginWindow:
         # Press 'Enter' key to signin from keyboard
         signinBtn.bind("<Return>", self.signup)
         
-
     # Login button
     def login(self, event=None):
 
@@ -84,8 +85,12 @@ class loginWindow:
                 break
             elif ur == u:
                 if pwd == p:
-                    # menu window...
-                    print("Login Successfully...")
+                    tmsg.showinfo("LOGIN","Log in Successfully")
+                    self.root.destroy()     # clase login window
+                    # opening main window
+                    new_root = tk.Tk()
+                    mainWindow(new_root, ur)
+                    new_root.mainloop()
                     break
                 else:
                     tmsg.showerror("ERROR","Invalid Password! Try Again...")
@@ -93,6 +98,7 @@ class loginWindow:
         else:
             tmsg.showerror("ERROR","Invalid Username! Try Again...")
 
+    # Signin button
     def signup(self, event=None):
 
         self.root.destroy()  # closing Login Window
@@ -126,12 +132,11 @@ class loginWindow:
             yposL += 50
             yposE += 50
 
-        signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", command=self.save)
+        signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
         signBtn.place(relx=0.5, y=550, anchor="center")
 
         # Press 'Enter' key to signin from keyboard
         signBtn.bind("<Return>", self.save)
-
 
     # save user info in database
     def save(self, event=None):         
@@ -166,25 +171,112 @@ class loginWindow:
         loginWindow(root)
         root.mainloop()
 
+# class for main window
+class mainWindow:
+
+    # Menu Display
+    def __init__(self, root, username):
         
+        self.root = root
+
+        # geometry of window
+        self.root.geometry("1200x750")
+        self.root.maxsize(1200, 750)
+        self.root.minsize(1200, 750)
+        self.root.title("Main Menu")
+        self.root.config(bg="#fff5e6")
+
+        # icon
+        icon = tk.PhotoImage(file="train_icon.png")
+        self.root.iconphoto(True, icon)
+
+        # greeting
+        tk.Label(self.root, text="Welcome, {}".format(username), font="lucida 20 bold", background="#fff5e6").place(x=460, y=10)
+
+
+        # FRAMES 
+
+        # menu frame
+        f1 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=63, background="#003366")
+        f1.place(x=10, y=80)
+
+        # frame for displaying menu option
+        self.f2 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=540, background="#ffdab9")
+        self.f2.place(x=10, y=170)
+
+
+        # BUTTONS
+
+        # my account
+        myBtn = tk.Button(self.root, text="MY ACCOUNT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.bt)
+        myBtn.place(x=10, y=15)
+
+        # log out
+        logoutBtn = tk.Button(self.root, text="LOG OUT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.logout)
+        logoutBtn.place(x=1040, y=15)
+
+        # button for book ticket
+        bookBtn = tk.Button(f1, text="BOOK TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.bt)
+        bookBtn.grid(row=1, column=1, padx=10, pady=10)
+
+        # button for cancel ticket
+        cancelBtn = tk.Button(f1, text="CANCEL TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        cancelBtn.grid(row=1, column=2, padx=10, pady=10)
+
+        # button for PNR status
+        pnrBtn = tk.Button(f1, text="PNR STATUS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        pnrBtn.grid(row=1, column=3, padx=10, pady=10)
+
+        # button for train schedule
+        scheduleBtn = tk.Button(f1, text="TRAIN SCHEDULE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        scheduleBtn.grid(row=1, column=4, padx=10, pady=10)
+
+        # button for track train 
+        trackBtn = tk.Button(f1, text="TRACK TRAIN", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        trackBtn.grid(row=1, column=5, padx=10, pady=10)
+
+
+    # COMMAND FOR EACH BUTTON
+
+    # my account button
+    def acc(self):
+        pass
+
+    # log out button
+    def logout(self):
+
+        # destroy main menu
+        self.root.destroy()
+
+        # opening login window
+        log = tk.Tk()
+        loginWindow(log)
+        log.mainloop()
+
+    # Booking Button
+    def bt(self):
+
+        tk.Label(self.f2, text="Booking Ticket Choose Stations", font="lucida 20 bold", background="#ffdab9").place(x=370, y=10)
+
         
 
+    
 
 
+    
 
 
-
-
-
-        
-
-
-
-
-
-# main
+# testing
 
 root = tk.Tk()
-app = loginWindow(root)
+# app = loginWindow(root)
 # app.signup()
+app = mainWindow(root, "Shubham")     
 root.mainloop()
