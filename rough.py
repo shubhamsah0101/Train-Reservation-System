@@ -67,4 +67,4 @@ sql="select * from login"
 cur1.execute(sql)
 rec = cur1.fetchall()
 for i in range(len(rec)):
-    print(rec[i][1], rec[i][3])
+    print(rec[i][2], rec[i][11])

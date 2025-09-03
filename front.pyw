@@ -78,14 +78,14 @@ class loginWindow:
         cur1.execute(sql)
         rec = cur1.fetchall()
         for i in range(len(rec)):
-            u=rec[i][1]
-            p=rec[i][3]
+            u=rec[i][2]
+            p=rec[i][11]
             if ur == "" or pwd == "":
                 tmsg.showerror("ERROR","Please Enter Correct Input.")
                 break
             elif ur == u:
                 if pwd == p:
-                    tmsg.showinfo("LOGIN","Log in Successfully")
+                    # tmsg.showinfo("LOGIN","Log in Successfully")
                     self.root.destroy()     # clase login window
                     # opening main window
                     new_root = tk.Tk()
@@ -106,60 +106,75 @@ class loginWindow:
         # creating Signup Window
         self.sign=tk.Tk()
 
-        self.sign.geometry("600x600")
-        self.sign.maxsize(600, 600)
-        self.sign.minsize(600, 600)
+        self.sign.geometry("1250x600")
+        self.sign.maxsize(1250, 600)
+        self.sign.minsize(1250, 600)
         self.sign.title("Sign Up")
         self.sign.config(bg="#ffdab9")
 
+        fr = tk.Frame(self.sign, relief="ridge", width=1100, height=500, bg="#ffdab9")
+        fr.place(x=50, y=60)
+
         # heading
-        tk.Label(text="Create Your Account",  font="lucida 20 bold", bg="#ffdab9", fg="#001f3f").place(relx=0.5, y=50, anchor="center")
+        tk.Label(self.sign,text="Create Your Account",  font="lucida 20 underline", bg="#ffdab9", fg="#001f3f").place(relx=0.5, rely=0.05, anchor="center")
 
         # user details entry
-        labels = ["Username", "Full Name", "Password", "Confirm Password", "Email", "Mobile", "Age", "Pin Code"]
-        self.entry = {}
-        yposL = 100
-        yposE = 105
+        labels1 = ["Full Name", "Username", "Gender (M/F)", "Date Of Birth (YYYY-MM-DD)", "Address", "PIN CODE"]
+        self.entry1 = {}
 
-        for label in labels:
-            tk.Label(self.sign, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=50, y=yposL)
-            if "Password" in label:     # to hide password
-                ent = tk.Entry(self.sign, font="lucida 16 bold", show="*")
-            else:
-                ent = tk.Entry(self.sign, font="lucida 16 bold")
-            ent.place(x=300, y=yposE)
-            self.entry[label] = ent
-            yposL += 50
-            yposE += 50
+        i = 1
+        for label in labels1:
+            tk.Label(fr, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
+            ent = tk.Entry(fr, font="lucida 16 bold")
+            ent.grid(row=i, column=1, padx=10, pady=20)
+            self.entry1[label] = ent
+            i += 1
 
+        labels2 = ["City", "State", "Mobile", "Email", "Password", "Confirm Password"]
+        self.entry2 = {}
+
+        i = 1
+        for label in labels2:
+            tk.Label(fr, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
+            ent = tk.Entry(fr, font="lucida 16 bold")
+            ent.grid(row=i, column=3, padx=10, pady=20)
+            self.entry2[label] = ent
+            i += 1  
+
+        # sign in button (save user data into database)
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
-        signBtn.place(relx=0.5, y=550, anchor="center")
+        signBtn.place(relx=0.5, rely=0.93, anchor="center")
 
-        # Press 'Enter' key to signin from keyboard
+        # # Press 'Enter' key to signin from keyboard
         signBtn.bind("<Return>", self.save)
 
     # save user info in database
     def save(self, event=None):         
         
         # obtaining all the user data to store in database
-        uname = self.entry["Username"].get()
-        fname = self.entry["Full Name"].get()
-        pwd = self.entry["Password"].get()
-        cpwd = self.entry["Confirm Password"].get()
-        email = self.entry["Email"].get()
-        mobile = self.entry["Mobile"].get()
-        age = self.entry["Age"].get()
-        pin = self.entry["Pin Code"].get()
-
-        if not uname or not fname or not pwd or not cpwd or not email or not mobile or not age or not pin:
+        fname = self.entry1["Full Name"].get()        
+        uname = self.entry1["Username"].get()
+        gender = self.entry1["Gender (M/F)"].get()
+        dob = self.entry1["Date Of Birth (YYYY-MM-DD)"].get()
+        address = self.entry1["Address"].get()
+        pincode = self.entry1["PIN CODE"].get()
+        city = self.entry2["City"].get()
+        state = self.entry2["State"].get()
+        mob = self.entry2["Mobile"].get()
+        mail = self.entry2["Email"].get()
+        pwd = self.entry2["Password"].get()
+        cpwd = self.entry2["Confirm Password"].get()
+        
+        if not fname or not uname or not gender or not dob or not address or not pincode or not city or not state or not mob or not mail or not pwd or not cpwd:
             tmsg.showerror("ERROR","Please fill all the required fields.")
             return
         if pwd != cpwd:
             tmsg.showerror("ERROR","Password do not match.\n\nTry Again")
             return
         try:
-            sql="""insert into login(username, fullname, pass, email, mobile, age, city_pin) values(%s, %s, %s, %s, %s, %s, %s)"""
-            values = (uname, fname, pwd, email, mobile, age, pin)
+            sql="""insert into login(fullname, username, gender, dob, address, pin, city, state, mobile, email, pwd)
+                   values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            values = (fname, uname, gender, dob, address, pincode, city, state, mob, mail, pwd)
             cur1.execute(sql, values)
             con1.commit()
             tmsg.showinfo("Success","Account Created Successfully")
@@ -179,11 +194,13 @@ class mainWindow:
         
         self.root = root
 
+        # title
+        self.root.title("Main Menu")
+
         # geometry of window
         self.root.geometry("1200x750")
         self.root.maxsize(1200, 750)
         self.root.minsize(1200, 750)
-        self.root.title("Main Menu")
         self.root.config(bg="#fff5e6")
 
         # icon
@@ -248,16 +265,16 @@ class mainWindow:
     # my account button
     def account(self):
         
-        self.acc = tk.Tk()
+        self.acc = tk.Toplevel(self.root)
 
         # geometry
-        self.acc.geometry("600x600")
-        self.acc.maxsize(600, 600)
-        self.acc.minsize(600, 600)
+        self.acc.geometry("1000x700")
+        self.acc.maxsize(1000, 700)
+        self.acc.minsize(1000, 700)
         self.acc.config(background="#fff5e6")
+        self.acc.title("PROFILE")
 
-
-        
+        tk.Label(self.acc, text="MY PROFILE", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
 
     # log out button
     def logout(self):
@@ -279,16 +296,12 @@ class mainWindow:
 
         
 
-    
-
-
-    
 
 
 # testing
 
 root = tk.Tk()
-# app = loginWindow(root)
+app = loginWindow(root)
 # app.signup()
-app = mainWindow(root, "Shubham")     
+# app = mainWindow(root, "Shubham")                                     
 root.mainloop()
