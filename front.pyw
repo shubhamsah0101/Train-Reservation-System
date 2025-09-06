@@ -81,7 +81,7 @@ class loginWindow:
             u=rec[i][2]
             p=rec[i][11]
             if ur == "" or pwd == "":
-                tmsg.showerror("ERROR","Please Enter Correct Input.")
+                tmsg.showwarning("Incomplete","Please Enter Correct Input.")
                 break
             elif ur == u:
                 if pwd == p:
@@ -166,7 +166,7 @@ class loginWindow:
         cpwd = self.entry2["Confirm Password"].get()
         
         if not fname or not uname or not gender or not dob or not address or not pincode or not city or not state or not mob or not mail or not pwd or not cpwd:
-            tmsg.showerror("ERROR","Please fill all the required fields.")
+            tmsg.showwarning("Incomplete","Please fill all the required fields.")
             return
         if pwd != cpwd:
             tmsg.showerror("ERROR","Password do not match.\n\nTry Again")
