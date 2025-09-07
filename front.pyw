@@ -154,8 +154,11 @@ class loginWindow:
 
     # back to login page
     def back(self):
-        self.sign.destroy()
-        bk = tk.Tk()
+
+        self.sign.destroy()     # closing sign up window
+
+        # opening log in window
+        bk = tk.Tk()            
         loginWindow(bk)
         bk.mainloop()
 
@@ -204,6 +207,7 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
+        self.username = username
 
         # title
         self.root.title("Main Menu")
@@ -275,17 +279,7 @@ class mainWindow:
 
     # my account button
     def account(self):
-        
-        self.acc = tk.Toplevel(self.root)
-
-        # geometry
-        self.acc.geometry("1000x700")
-        self.acc.maxsize(1000, 700)
-        self.acc.minsize(1000, 700)
-        self.acc.config(background="#fff5e6")
-        self.acc.title("PROFILE")
-
-        tk.Label(self.acc, text="MY PROFILE", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
+        profile(self.root, self.username)
 
     # log out button
     def logout(self):
@@ -298,14 +292,94 @@ class mainWindow:
         loginWindow(log)
         log.mainloop()
 
-    # Booking Button
+    # Book Ticket Button
     def bt(self):
 
         tk.Label(self.f2, text="BOOK TICKET", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
 
         pass
 
+
+# class for My Profile
+class profile:
+
+    def __init__(self, parent, username):
         
+        self.acc = tk.Toplevel(parent)
+
+        # get username for SQL query
+        self.username = username
+
+        # geometry
+        self.acc.geometry("965x650")
+        self.acc.maxsize(965, 650)
+        self.acc.minsize(965, 650)
+        self.acc.config(background="#fff5e6")
+        self.acc.title("PROFILE")
+
+        tk.Label(self.acc, text="MY PROFILE", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
+
+        # frame
+        frm = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=100, width=500)
+        frm.place(x=10, y=100)
+
+        # SQL query to get user data
+        sql = "select * from login where username = %s"
+        cur1.execute(sql, (username,))
+
+        rec = cur1.fetchone()
+
+        if rec is None:   # no user found
+            tmsg.showerror("Error", f"User '{username}' not found in database!")
+            self.acc.destroy()
+            return
+
+        # displaying user data
+        labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address"]   
+
+        i = 1
+        for label in labels1:
+            tk.Label(frm, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
+            i += 1
+
+        # user data from MySQL database
+        data1 = rec[1:6]
+
+        j = 1
+        for a in data1:
+            tk.Label(frm, text=a, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=1, padx=10, pady=20)
+            j += 1
+
+        # displaying user data
+        labels2 = ["PIN CODE", "City", "State", "Mobile", "Email"]  
+
+        i = 1
+        for label in labels2:
+            tk.Label(frm, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
+            i += 1
+
+        # user data from MySQL database
+        data2 = rec[6:11]
+
+        j = 1
+        for b in data2:
+            tk.Label(frm, text=b, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=3, padx=10, pady=20)
+            j += 1
+
+        # user data update button
+        tk.Button(self.acc, text="UPDATE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2").place(x=200, y=550)
+
+        # back update button
+        tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=650, y=550)
+
+    # back to main menu
+    def back(self):
+
+        self.acc.destroy()  #destroy the profile window
+
+    # update profile
+    # def update(self):
+
 
 
 

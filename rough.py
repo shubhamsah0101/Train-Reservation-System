@@ -62,9 +62,17 @@ import mysql.connector as con
 con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
 cur1 = con1.cursor()
 
-sql="select * from login"
+sql="select * from login where username = 'Shubham1'"
 
 cur1.execute(sql)
 rec = cur1.fetchall()
-for i in range(len(rec)):
-    print(rec[i][2], rec[i][11])
+print(rec)
+
+# for i in range(len(rec)):
+#     for j in range(i):
+#         print(rec[i][j])
+
+data1 = rec[0][1:7]
+
+for i in data1:
+    print(i)
