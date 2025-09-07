@@ -208,6 +208,7 @@ class mainWindow:
         
         self.root = root
         self.username = username
+        # self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -314,14 +315,17 @@ class profile:
         self.acc.geometry("965x650")
         self.acc.maxsize(965, 650)
         self.acc.minsize(965, 650)
+        # self.acc.geometry("1000x1000")
+        # self.acc.maxsize(965, 650)
+        # self.acc.minsize(965, 650)    
         self.acc.config(background="#fff5e6")
         self.acc.title("PROFILE")
 
         tk.Label(self.acc, text="MY PROFILE", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
 
-        # frame
-        frm = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=100, width=500)
-        frm.place(x=10, y=100)
+        # frame for data display
+        f1 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=850, width=700) 
+        f1.place(x=10, y=100)
 
         # SQL query to get user data
         sql = "select * from login where username = %s"
@@ -339,7 +343,7 @@ class profile:
 
         i = 1
         for label in labels1:
-            tk.Label(frm, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
+            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
             i += 1
 
         # user data from MySQL database
@@ -347,7 +351,7 @@ class profile:
 
         j = 1
         for a in data1:
-            tk.Label(frm, text=a, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=1, padx=10, pady=20)
+            tk.Label(f1, text=a, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=1, padx=10, pady=20)
             j += 1
 
         # displaying user data
@@ -355,7 +359,7 @@ class profile:
 
         i = 1
         for label in labels2:
-            tk.Label(frm, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
+            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
             i += 1
 
         # user data from MySQL database
@@ -363,14 +367,23 @@ class profile:
 
         j = 1
         for b in data2:
-            tk.Label(frm, text=b, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=3, padx=10, pady=20)
+            tk.Label(f1, text=b, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=3, padx=10, pady=20)
             j += 1
 
-        # user data update button
-        tk.Button(self.acc, text="UPDATE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2").place(x=200, y=550)
+        # frame for action buttons
+        f2 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=100, width=940)
+        f2.place(x=10, y=520)
 
-        # back update button
-        tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=650, y=550)
+        # update button
+        tk.Button(f2, text="UPDATE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2").pack(side="left", padx=169, pady=20)
+
+        # back button
+        tk.Button(f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).pack(side="right", padx=169, pady=20)
+
+        '''Change the My Profile 
+           in such a way that 
+           it's frame aligns with
+           any text size...'''
 
     # back to main menu
     def back(self):
@@ -378,7 +391,8 @@ class profile:
         self.acc.destroy()  #destroy the profile window
 
     # update profile
-    # def update(self):
+    def update(self):
+        pass
 
 
 
