@@ -145,8 +145,19 @@ class loginWindow:
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
         signBtn.place(relx=0.5, rely=0.93, anchor="center")
 
-        # # Press 'Enter' key to signin from keyboard
+        # Press 'Enter' key to signin from keyboard
         signBtn.bind("<Return>", self.save)
+
+        # back button
+        backBtn=tk.Button(self.sign, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
+        backBtn.place(x=10, y=10)
+
+    # back to login page
+    def back(self):
+        self.sign.destroy()
+        bk = tk.Tk()
+        loginWindow(bk)
+        bk.mainloop()
 
     # save user info in database
     def save(self, event=None):         
