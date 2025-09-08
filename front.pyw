@@ -208,7 +208,7 @@ class mainWindow:
         
         self.root = root
         self.username = username
-        # self.username = "Shubham1"
+        # self.username = "Rahul1"
 
         # title
         self.root.title("Main Menu")
@@ -314,17 +314,14 @@ class profile:
         # geometry
         self.acc.geometry("965x650")
         self.acc.maxsize(965, 650)
-        self.acc.minsize(965, 650)
-        # self.acc.geometry("1000x1000")
-        # self.acc.maxsize(965, 650)
-        # self.acc.minsize(965, 650)    
+        self.acc.minsize(965, 650)    
         self.acc.config(background="#fff5e6")
         self.acc.title("PROFILE")
 
         tk.Label(self.acc, text="MY PROFILE", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
 
         # frame for data display
-        f1 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=850, width=700) 
+        f1 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=350, width=940) 
         f1.place(x=10, y=100)
 
         # SQL query to get user data
@@ -341,34 +338,42 @@ class profile:
         # displaying user data
         labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address"]   
 
+        pyL1 = 50
         i = 1
         for label in labels1:
-            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
+            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=50, y=pyL1)
             i += 1
+            pyL1 += 50
 
         # user data from MySQL database
         data1 = rec[1:6]
 
+        pyD1 = 50
         j = 1
         for a in data1:
-            tk.Label(f1, text=a, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=1, padx=10, pady=20)
+            tk.Label(f1, text=a, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=230, y=pyD1)
             j += 1
+            pyD1 += 50
 
         # displaying user data
         labels2 = ["PIN CODE", "City", "State", "Mobile", "Email"]  
 
+        pyL2 = 50
         i = 1
         for label in labels2:
-            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
+            tk.Label(f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=550, y=pyL2)
             i += 1
+            pyL2 += 50
 
         # user data from MySQL database
         data2 = rec[6:11]
 
+        pyD2 = 50
         j = 1
         for b in data2:
-            tk.Label(f1, text=b, font="lucida 16 bold", bg="#ffdab9", fg="#333333").grid(row=j, column=3, padx=10, pady=20)
+            tk.Label(f1, text=b, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=730, y=pyD2)
             j += 1
+            pyD2 += 50
 
         # frame for action buttons
         f2 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=100, width=940)
@@ -379,11 +384,6 @@ class profile:
 
         # back button
         tk.Button(f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).pack(side="right", padx=169, pady=20)
-
-        '''Change the My Profile 
-           in such a way that 
-           it's frame aligns with
-           any text size...'''
 
     # back to main menu
     def back(self):
@@ -402,5 +402,5 @@ class profile:
 root = tk.Tk()
 app = loginWindow(root)
 # app.signup()
-# app = mainWindow(root, "Shubham")                                     
+# app = mainWindow(root, "Rahul")                                     
 root.mainloop()
