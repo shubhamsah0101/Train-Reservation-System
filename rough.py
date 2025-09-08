@@ -66,35 +66,35 @@ sql="select * from login where username = 'Shubham1'"
 
 cur1.execute(sql)
 rec = cur1.fetchall()
-# print(rec)
+print(rec[0][0])
 
 # for i in range(len(rec)):
 #     for j in range(i):
 #         print(rec[i][j])
 
-data1 = rec[0][1:7]
+# data1 = rec[0][1:7]
 # print(data1)
 
-for i in data1:
-    print(i)
+# for i in rec:
+    # print(i[0])
 
-root = tk.Tk()
+# root = tk.Tk()
 
-root.maxsize(400, 400)
-root.minsize(400, 400)
-root.geometry("400x400")
+# root.maxsize(400, 400)
+# root.minsize(400, 400)
+# root.geometry("400x400")
 
-f1 = tk.Frame(root, relief="ridge", bd=1, background="red", height=200, width=200)
-f1.place(x=20, y=50)
-
-
-def b1():
-    f1.destroy()
-    fr = tk.Frame(root, relief="ridge", bd=1, background="yellow", height=200, width=200)
-    fr.place(x=20, y=50)
-    tk.Button(fr, text="Click2", padx=10, pady=10).place(x=10, y=10)
-
-tk.Button(f1, text="Click1", padx=10, pady=10, command=b1).place(x=10, y=10)
+# f1 = tk.Frame(root, relief="ridge", bd=1, background="red", height=200, width=200)
+# f1.place(x=20, y=50)
 
 
-root.mainloop()
+# def b1():
+#     f1.destroy()
+#     fr = tk.Frame(root, relief="ridge", bd=1, background="yellow", height=200, width=200)
+#     fr.place(x=20, y=50)
+#     tk.Button(fr, text="Click2", padx=10, pady=10).place(x=10, y=10)
+
+# tk.Button(f1, text="Click1", padx=10, pady=10, command=b1).place(x=10, y=10)
+
+
+# root.mainloop()

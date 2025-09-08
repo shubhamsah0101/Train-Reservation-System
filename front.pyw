@@ -208,7 +208,7 @@ class mainWindow:
         
         self.root = root
         # self.username = username
-        self.username = "Rahul1"
+        self.username = "Shubham2"
 
         # title
         self.root.title("Main Menu")
@@ -306,6 +306,7 @@ class profile:
 
     def __init__(self, parent, username):
         
+        self.parent = parent
         self.acc = tk.Toplevel(parent)
 
         # get username for SQL query
@@ -328,51 +329,43 @@ class profile:
         sql = "select * from login where username = %s"
         cur1.execute(sql, (username,))
 
-        rec = cur1.fetchone()
-
+        rec = cur1.fetchone()   # fetching all data
+        
         if rec is None:   # no user found
             tmsg.showerror("Error", f"User '{username}' not found in database!")
             self.acc.destroy()
             return
 
-        # displaying user data
-        labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address"]   
-
-        pyL1 = 50
-        i = 1
-        for label in labels1:
-            tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=30, y=pyL1)
-            i += 1
-            pyL1 += 50
+        self.id = rec[0]     # fetching user id for saveChange command
 
         # user data from MySQL database
         self.data1 = rec[1:6]
+        self.data2 = rec[6:11]
+
+        # displaying user data on left
+        labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address"]  
+
+        pyL1 = 50
+        for label in labels1:
+            tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=20, y=pyL1)
+            pyL1 += 50
 
         pyD1 = 50
-        j = 1
         for a in self.data1:
-            tk.Label(self.f1, text=a, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=200, y=pyD1)
-            j += 1
+            tk.Label(self.f1, text=a, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=180, y=pyD1)
             pyD1 += 50
 
-        # displaying user data
+        # displaying user data on right
         labels2 = ["PIN CODE", "City", "State", "Mobile", "Email"]  
 
         pyL2 = 50
-        i = 1
         for label in labels2:
-            tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=500, y=pyL2)
-            i += 1
+            tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=460, y=pyL2)
             pyL2 += 50
 
-        # user data from MySQL database
-        self.data2 = rec[6:11]
-
         pyD2 = 50
-        j = 1
         for b in self.data2:
-            tk.Label(self.f1, text=b, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=730, y=pyD2)
-            j += 1
+            tk.Label(self.f1, text=b, font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=600, y=pyD2)
             pyD2 += 50
 
         # frame for action buttons
@@ -380,15 +373,13 @@ class profile:
         self.f2.place(x=10, y=520)
 
         # update button
-        tk.Button(self.f2, text="UPDATE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.update).pack(side="left", padx=169, pady=20)
+        tk.Button(self.f2, text="Update Profile", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.update).place(x=30, y=25)
+
+        # change password
+        tk.Button(self.f2, text="Change Password", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.changePass).place(x=385, y=25)
 
         # back button
-        tk.Button(self.f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).pack(side="right", padx=169, pady=20)
-
-    # back to main menu
-    def back(self):
-
-        self.acc.destroy()  #destroy the profile window
+        tk.Button(self.f2, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=790, y=25)
 
     # update profile
     def update(self):
@@ -396,6 +387,8 @@ class profile:
         # clear previous frame if exists
         for widget in self.acc.winfo_children():
             widget.destroy()
+
+        tk.Label(self.acc, text="Update Profile", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.05, anchor="center")
 
         # frame for data display
         self.f1 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=350, width=940) 
@@ -405,47 +398,115 @@ class profile:
         labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address"]  
         self.d1 = {} 
 
-
-        # update this loop.........
-        # ...........
-
-        pyL1 = 50
-        pyD1 = 55
-        ety1 = 0
-        i = 1
-        for label in labels1:
+        pyL1, pyD1 = 50, 55
+        
+        for i, label in enumerate(labels1):
             tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=30, y=pyL1)
             ent = tk.Entry(self.f1, font="lucida 16 bold")
             ent.place(x=200, y=pyD1)
-            ent.insert(0, self.data1[ety1])
+            ent.insert(0, self.data1[i])
             self.d1[label] = ent
-            ety1 += 1
-            i += 1
             pyL1 += 50
             pyD1 += 50
 
-        print(self.d1)
-
         # displaying user data
         labels2 = ["PIN CODE", "City", "State", "Mobile", "Email"]  
+        self.d2 = {}
 
-        pyL2 = 50
-        pyD2 = 55
-        ety2 = 0
-        i = 1
-        for label in labels2:
+        pyL2, pyD2 = 50, 55
+        for i, label in enumerate(labels2):
             tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=500, y=pyL2)
             ent = tk.Entry(self.f1, font="lucida 16 bold")
             ent.place(x=650, y=pyD2)
-            ent.insert(0, self.data2[ety2])
-            ety2 += 1
-            i += 1
+            ent.insert(0, self.data2[i])
+            self.d2[label] = ent
             pyL2 += 50
             pyD2 += 50
 
+        # frame for action buttons
+        self.f2 = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=100, width=940)
+        self.f2.place(x=10, y=520)
+
+        # update button
+        tk.Button(self.f2, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.saveChange).pack(side="left", padx=170, pady=20)
+
+        # back button
+        tk.Button(self.f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).pack(side="right", padx=170, pady=20)        
+
+    def saveChange(self):
+
+        fname = self.d1["Full Name"].get()
+        uname = self.d1["Username"].get()
+        gender = self.d1["Gender"].get()
+        dob = self.d1["Date Of Birth"].get()
+        add = self.d1["Address"].get()
+
+        pin = self.d2["PIN CODE"].get()
+        city = self.d2["City"].get()
+        state = self.d2["State"].get()
+        mob = self.d2["Mobile"].get()
+        email = self.d2["Email"].get()
         
+        try:
+            sql = "update login set fullname = %s, username = %s, gender = %s, dob = %s, address = %s, pin = %s, city = %s, state = %s, mobile = %s, email = %s where id = %s"
+            values = (fname, uname, gender, dob, add, pin, city, state, mob, email, self.id)
+            cur1.execute(sql, values)
+            con1.commit()   
 
+            tmsg.showinfo("Update", "Your Profile updated successfully.")
 
+            self.acc.destroy()      # closing my profile window
+            self.parent.destroy()   # closing main menu
+
+            # opening fresh login/signup window
+            root = tk.Tk()
+            loginWindow(root)
+            root.mainloop()
+
+        except Exception as e:
+            tmsg.showerror("Database Error", str(e))
+
+    # back to main menu
+    def back(self):
+
+        self.acc.destroy()  #destroy the profile window
+
+    def changePass(self):
+
+        # clear previous frame if exists
+        for widget in self.acc.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.acc, text="Change Password", font="lucida 20 underline", background="#fff5e6").place(relx=0.5, rely=0.1, anchor="center")
+
+        # new frame
+        self.fm = tk.Frame(self.acc, relief="ridge", bd=1, background="#ffdab9", height=350, width=870)
+        self.fm.place(relx=0.05, rely=0.2)
+
+        # password
+        self.pwd = tk.Label(self.fm, text="New Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
+        self.pwd.place(x=100, y=100)
+
+        pwdEty = tk.Entry(self.fm, font="lucida 20 bold")
+        pwdEty.place(x=400, y=100)
+
+        # confirm password
+        self.pwd = tk.Label(self.fm, text="Confirm Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
+        self.pwd.place(x=100, y=200)
+
+        cpwdEty = tk.Entry(self.fm, font="lucida 20 bold")
+        cpwdEty.place(x=400, y=200)
+
+        # save button
+        tk.Button(self.acc, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2").place(x=200, y=550)
+
+        # back button
+        tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=600, y=550)
+
+    def savePass(self):
+
+        # password change code...
+        pass
 
 
 
@@ -455,5 +516,5 @@ class profile:
 root = tk.Tk()
 # app = loginWindow(root)
 # app.signup()
-app = mainWindow(root, "Rahul")                                    
+app = mainWindow(root, "Shubham")                                    
 root.mainloop()
