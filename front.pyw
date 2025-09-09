@@ -2,6 +2,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
+from tkcalendar import DateEntry
 
 # MySQL Connection
 import mysql.connector as con
@@ -222,8 +223,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        self.username = username
-        # self.username = "Shubham2"
+        # self.username = username
+        self.username = "Shubham2"
 
         # title
         self.root.title("Main Menu")
@@ -311,9 +312,32 @@ class mainWindow:
     # Book Ticket Button
     def bt(self, event=None):
 
-        tk.Label(self.f2, text="BOOK TICKET", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
+        tk.Label(self.f2, text="Choose Train", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
 
-        pass
+        self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=150, background="#ff6600")
+        self.frm.place(x=10, y=60)
+
+        # source station
+        tk.Label(self.frm, text="From : ", font="lucida 18 bold", background="#ff6600").place(x=20, y=30)
+        sor = tk.Entry(self.frm, font="lucida 18 bold")
+        sor.place(x=110, y=30)
+
+        # destinatoin station
+        tk.Label(self.frm, text="To : ", font="lucida 18 bold", background="#ff6600").place(x=20, y=90)
+        des = tk.Entry(self.frm, font="lucida 18 bold")
+        des.place(x=110, y=90)
+
+         # select date
+        tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=600, y=30)
+        cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
+        cal.place(x=800, y=30)
+
+        # search button
+        srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        srhBtn.place(x=1000, y=25)
+
+       
 
 
 # class for My Profile
@@ -577,6 +601,6 @@ class profile:
 # testing
 
 root = tk.Tk()
-app = loginWindow(root)
-# app = mainWindow(root, "Shubham")                                    
+# app = loginWindow(root)
+app = mainWindow(root, "Shubham")                                    
 root.mainloop()
