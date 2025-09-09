@@ -13,7 +13,7 @@ cur1 = con1.cursor()
 # class for Login/Signup window
 class loginWindow:
 
-    # login/signin window
+    # login/signup window
     def __init__(self, root):
         
         self.root = root
@@ -57,6 +57,7 @@ class loginWindow:
         # log in button
         loginBtn = tk.Button(f1, text="Log in", font="licida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.login)
         loginBtn.place(x=180, y=320)
+        loginBtn.bind("<Return>", self.login)
 
         # sign in button
         tk.Label(f1, text="Don't have an Account?\nCreate one!", font="lucida 16 bold",bg="#ffdab9", fg="#006666").place(x=110, y=400)
@@ -64,12 +65,8 @@ class loginWindow:
         # sign up button
         signinBtn=tk.Button(f1, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.signup)
         signinBtn.place(x=170, y=480)
-
-        # Press 'Enter' key to login from keyboard
-        loginBtn.bind("<Return>", self.login)
-
-        # Press 'Enter' key to signin from keyboard
         signinBtn.bind("<Return>", self.signup)
+
         
     # Login button event
     def login(self, event=None):
@@ -78,6 +75,7 @@ class loginWindow:
         ur = self.user.get()
         pwd = self.password.get()
 
+        # obtaining username and password from database for user verification
         sql="select * from login"
         cur1.execute(sql)
         rec = cur1.fetchall()
@@ -89,7 +87,6 @@ class loginWindow:
                 break
             elif ur == u:
                 if pwd == p:
-                    # tmsg.showinfo("LOGIN","Log in Successfully")
                     self.root.destroy()     # clase login window
                     # opening main window
                     new_root = tk.Tk()
@@ -101,6 +98,7 @@ class loginWindow:
                     break
         else:
             tmsg.showerror("ERROR","Invalid Username! Try Again...")
+
 
     # Signin button event
     def signup(self, event=None):
@@ -152,15 +150,13 @@ class loginWindow:
         # sign in button (save user data into database)
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
         signBtn.place(relx=0.5, rely=0.93, anchor="center")
-
-        # Press 'Enter' key to signin from keyboard
         signBtn.bind("<Return>", self.save)
 
         # back(to login page) button
         backBtn=tk.Button(self.sign, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="  hand2", command=self.back)
         backBtn.place(x=10, y=10)
-
         backBtn.bind("<Return>", self.back)
+
 
     # back to login page
     def back(self, event=None):
@@ -173,22 +169,23 @@ class loginWindow:
         loginWindow(bk)
         bk.mainloop()
 
+
     # save user info in database
     def save(self, event=None):         
         
         # obtaining all the user data to store in database
-        fname = self.entry1["Full Name"].get()        
-        uname = self.entry1["Username"].get()
-        gender = self.entry1["Gender (M/F)"].get()
-        dob = self.entry1["Date Of Birth (YYYY-MM-DD)"].get()
+        fname   = self.entry1["Full Name"].get()        
+        uname   = self.entry1["Username"].get()
+        gender  = self.entry1["Gender (M/F)"].get()
+        dob     = self.entry1["Date Of Birth (YYYY-MM-DD)"].get()
         address = self.entry1["Address"].get()
         pincode = self.entry1["PIN CODE"].get()
-        city = self.entry2["City"].get()
-        state = self.entry2["State"].get()
-        mob = self.entry2["Mobile"].get()
-        mail = self.entry2["Email"].get()
-        pwd = self.entry2["Password"].get()
-        cpwd = self.entry2["Confirm Password"].get()
+        city    = self.entry2["City"].get()
+        state   = self.entry2["State"].get()
+        mob     = self.entry2["Mobile"].get()
+        mail    = self.entry2["Email"].get()
+        pwd     = self.entry2["Password"].get()
+        cpwd    = self.entry2["Confirm Password"].get()
         
         if not fname or not uname or not gender or not dob or not address or not pincode or not city or not state or not mob or not mail or not pwd or not cpwd:
             tmsg.showwarning("Incomplete","Please fill all the required fields.")
@@ -217,6 +214,7 @@ class loginWindow:
         loginWindow(root)
         root.mainloop()
 
+
 # class for main window
 class mainWindow:
 
@@ -243,7 +241,6 @@ class mainWindow:
         # greeting
         tk.Label(self.root, text="Welcome, {}".format(username), font="lucida 20 bold", background="#fff5e6").place(x=460, y=10)
 
-
         # FRAMES 
         # menu frame
         f1 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=63, background="#003366")
@@ -252,7 +249,6 @@ class mainWindow:
         # frame for displaying menu option
         self.f2 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=540, background="#ffdab9")
         self.f2.place(x=10, y=170)
-
 
         # BUTTONS
         # my account
@@ -299,6 +295,7 @@ class mainWindow:
     def account(self, event=None):
         profile(self.root, self.username)
 
+
     # log out button
     def logout(self, event=None):
 
@@ -309,6 +306,7 @@ class mainWindow:
         log = tk.Tk()
         loginWindow(log)
         log.mainloop()
+
 
     # Book Ticket Button
     def bt(self, event=None):
@@ -353,7 +351,7 @@ class profile:
             self.acc.destroy()
             return
 
-        self.id = rec[0]     # fetching user id for saveChange command
+        self.id = rec[0]     # fetching user id for saveChange() command
 
         # user data from MySQL database
         self.data1 = rec[1:6]
@@ -403,6 +401,7 @@ class profile:
         backBtn = tk.Button(self.f2, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
         backBtn.place(x=790, y=25)
         backBtn.bind("<Return>", self.back)
+
 
     # update profile
     def update(self, event=None):
@@ -460,8 +459,11 @@ class profile:
         bkBtn.pack(side="right", padx=170, pady=20)    
         bkBtn.bind("<Return>", self.back)    
 
+
+    # save user's updated data in database
     def saveChange(self, event=None):
 
+        # obtaining user data from textbox
         fname = self.d1["Full Name"].get()
         uname = self.d1["Username"].get()
         gender = self.d1["Gender"].get()
@@ -474,6 +476,7 @@ class profile:
         mob = self.d2["Mobile"].get()
         email = self.d2["Email"].get()
         
+        # updating user data to database
         try:
             sql = "update login set fullname = %s, username = %s, gender = %s, dob = %s, address = %s, pin = %s, city = %s, state = %s, mobile = %s, email = %s where id = %s"
             values = (fname, uname, gender, dob, add, pin, city, state, mob, email, self.id)
@@ -493,11 +496,14 @@ class profile:
         except Exception as e:
             tmsg.showerror("Database Error", str(e))
 
+
     # back to main menu
     def back(self, event=None):
 
         self.acc.destroy()  #destroy the profile window
 
+
+    # password change
     def changePass(self, event=None):
 
         # clear previous frame if exists
@@ -530,10 +536,12 @@ class profile:
         saveBtn.bind("<Return>", self.savePass)
 
         # back button
-        bkBtn = tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=600, y=550)   
+        bkBtn = tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
+        bkBtn.place(x=600, y=550)   
         bkBtn.bind("<Return>", self.back)    
         
 
+    # save user's updated password in database
     def savePass(self, event=None):
 
         pwd = self.pwdEty.get()
@@ -569,7 +577,6 @@ class profile:
 # testing
 
 root = tk.Tk()
-app = loginWindow(root)         
-# app.signup()
+app = loginWindow(root)
 # app = mainWindow(root, "Shubham")                                    
 root.mainloop()
