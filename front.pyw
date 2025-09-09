@@ -1,9 +1,12 @@
+# modules for Python GUI
 import tkinter as tk
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
 
+# MySQL Connection
 import mysql.connector as con
 
+# Database connection and data transfer and retrival
 con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
 cur1 = con1.cursor()
 
@@ -23,18 +26,18 @@ class loginWindow:
         self.root.minsize(1000, 600)
         self.root.geometry("1000x600")
 
-        # icon 
+        # icon for every window
         icon = tk.PhotoImage(file="train_icon.png")
         self.root.iconphoto(True, icon)
 
-        # background image
+        # background image of login window
         image=Image.open("background.jpg")
         image=image.resize((1000, 600))
         self.bg=ImageTk.PhotoImage(image)
         bg_label=tk.Label(root, image=self.bg)
         bg_label.place(x=0, y=0, relheight=1, relwidth=1)
 
-        # root frame
+        # root frame 
         f1=tk.Frame(root, bd=1, relief="ridge", width=500, height=550, bg="#ffdab9")
         f1.place(x=10, y=25)
 
@@ -58,6 +61,7 @@ class loginWindow:
         # sign in button
         tk.Label(f1, text="Don't have an Account?\nCreate one!", font="lucida 16 bold",bg="#ffdab9", fg="#006666").place(x=110, y=400)
 
+        # sign up button
         signinBtn=tk.Button(f1, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.signup)
         signinBtn.place(x=170, y=480)
 
@@ -67,7 +71,7 @@ class loginWindow:
         # Press 'Enter' key to signin from keyboard
         signinBtn.bind("<Return>", self.signup)
         
-    # Login button
+    # Login button event
     def login(self, event=None):
 
         # access of user id and password
@@ -98,7 +102,7 @@ class loginWindow:
         else:
             tmsg.showerror("ERROR","Invalid Username! Try Again...")
 
-    # Signin button
+    # Signin button event
     def signup(self, event=None):
 
         self.root.destroy()  # closing Login Window
@@ -112,6 +116,7 @@ class loginWindow:
         self.sign.title("Sign Up")
         self.sign.config(bg="#ffdab9")
 
+        # background frame 
         fr = tk.Frame(self.sign, relief="ridge", width=1100, height=500, bg="#ffdab9")
         fr.place(x=50, y=60)
 
@@ -136,7 +141,10 @@ class loginWindow:
         i = 1
         for label in labels2:
             tk.Label(fr, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=2, padx=10, pady=20)
-            ent = tk.Entry(fr, font="lucida 16 bold")
+            if label == "Password" or label == "Confirm Password":
+                ent = tk.Entry(fr, font="lucida 16 bold", show="*")
+            else:
+                ent = tk.Entry(fr, font="lucida 16 bold")
             ent.grid(row=i, column=3, padx=10, pady=20)
             self.entry2[label] = ent
             i += 1  
@@ -148,14 +156,17 @@ class loginWindow:
         # Press 'Enter' key to signin from keyboard
         signBtn.bind("<Return>", self.save)
 
-        # back button
-        backBtn=tk.Button(self.sign, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
+        # back(to login page) button
+        backBtn=tk.Button(self.sign, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="  hand2", command=self.back)
         backBtn.place(x=10, y=10)
 
-    # back to login page
-    def back(self):
+        backBtn.bind("<Return>", self.back)
 
-        self.sign.destroy()     # closing sign up window
+    # back to login page
+    def back(self, event=None):
+
+        # closing sign up window
+        self.sign.destroy()     
 
         # opening log in window
         bk = tk.Tk()            
@@ -182,9 +193,15 @@ class loginWindow:
         if not fname or not uname or not gender or not dob or not address or not pincode or not city or not state or not mob or not mail or not pwd or not cpwd:
             tmsg.showwarning("Incomplete","Please fill all the required fields.")
             return
+        
+        if len(pwd) < 8:
+            tmsg.showerror("Password Length", "Password should be at least 8 characters long.")
+            return
+    
         if pwd != cpwd:
             tmsg.showerror("ERROR","Password do not match.\n\nTry Again")
             return
+        
         try:
             sql="""insert into login(fullname, username, gender, dob, address, pin, city, state, mobile, email, pwd)
                    values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
@@ -207,8 +224,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        # self.username = username
-        self.username = "Shubham2"
+        self.username = username
+        # self.username = "Shubham2"
 
         # title
         self.root.title("Main Menu")
@@ -228,7 +245,6 @@ class mainWindow:
 
 
         # FRAMES 
-
         # menu frame
         f1 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=63, background="#003366")
         f1.place(x=10, y=80)
@@ -239,21 +255,23 @@ class mainWindow:
 
 
         # BUTTONS
-
         # my account
         myBtn = tk.Button(self.root, text="MY ACCOUNT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
         cursor="hand2", command=self.account)
         myBtn.place(x=10, y=15)
+        myBtn.bind("<Return>", self.account)
 
         # log out
         logoutBtn = tk.Button(self.root, text="LOG OUT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
         cursor="hand2", command=self.logout)
         logoutBtn.place(x=1040, y=15)
+        logoutBtn.bind("<Return>", self.logout)
 
         # button for book ticket
         bookBtn = tk.Button(f1, text="BOOK TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
         cursor="hand2", command=self.bt)
         bookBtn.grid(row=1, column=1, padx=10, pady=10)
+        bookBtn.bind("<Return>", self.bt)
 
         # button for cancel ticket
         cancelBtn = tk.Button(f1, text="CANCEL TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
@@ -277,13 +295,12 @@ class mainWindow:
 
 
     # COMMAND FOR EACH BUTTON
-
     # my account button
-    def account(self):
+    def account(self, event=None):
         profile(self.root, self.username)
 
     # log out button
-    def logout(self):
+    def logout(self, event=None):
 
         # destroy main menu
         self.root.destroy()
@@ -294,7 +311,7 @@ class mainWindow:
         log.mainloop()
 
     # Book Ticket Button
-    def bt(self):
+    def bt(self, event=None):
 
         tk.Label(self.f2, text="BOOK TICKET", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
 
@@ -373,16 +390,22 @@ class profile:
         self.f2.place(x=10, y=520)
 
         # update button
-        tk.Button(self.f2, text="Update Profile", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.update).place(x=30, y=25)
+        updateBtn = tk.Button(self.f2, text="Update Profile", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.update)
+        updateBtn.place(x=30, y=25)
+        updateBtn.bind("<Return>", self.update)
 
         # change password
-        tk.Button(self.f2, text="Change Password", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.changePass).place(x=385, y=25)
+        changeBtn = tk.Button(self.f2, text="Change Password", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.changePass)
+        changeBtn.place(x=385, y=25)
+        changeBtn.bind("<Return>", self.changePass)
 
         # back button
-        tk.Button(self.f2, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=790, y=25)
+        backBtn = tk.Button(self.f2, text="Back", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
+        backBtn.place(x=790, y=25)
+        backBtn.bind("<Return>", self.back)
 
     # update profile
-    def update(self):
+    def update(self, event=None):
 
         # clear previous frame if exists
         for widget in self.acc.winfo_children():
@@ -428,12 +451,16 @@ class profile:
         self.f2.place(x=10, y=520)
 
         # update button
-        tk.Button(self.f2, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.saveChange).pack(side="left", padx=170, pady=20)
+        upBtn = tk.Button(self.f2, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.saveChange)
+        upBtn.pack(side="left", padx=170, pady=20)
+        upBtn.bind("<Return>", self.saveChange)
 
         # back button
-        tk.Button(self.f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).pack(side="right", padx=170, pady=20)        
+        bkBtn = tk.Button(self.f2, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back)
+        bkBtn.pack(side="right", padx=170, pady=20)    
+        bkBtn.bind("<Return>", self.back)    
 
-    def saveChange(self):
+    def saveChange(self, event=None):
 
         fname = self.d1["Full Name"].get()
         uname = self.d1["Username"].get()
@@ -467,11 +494,11 @@ class profile:
             tmsg.showerror("Database Error", str(e))
 
     # back to main menu
-    def back(self):
+    def back(self, event=None):
 
         self.acc.destroy()  #destroy the profile window
 
-    def changePass(self):
+    def changePass(self, event=None):
 
         # clear previous frame if exists
         for widget in self.acc.winfo_children():
@@ -487,26 +514,54 @@ class profile:
         self.pwd = tk.Label(self.fm, text="New Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
         self.pwd.place(x=100, y=100)
 
-        pwdEty = tk.Entry(self.fm, font="lucida 20 bold")
-        pwdEty.place(x=400, y=100)
+        self.pwdEty = tk.Entry(self.fm, font="lucida 20 bold", show="*")
+        self.pwdEty.place(x=400, y=100)
 
         # confirm password
-        self.pwd = tk.Label(self.fm, text="Confirm Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
-        self.pwd.place(x=100, y=200)
+        self.cpwd = tk.Label(self.fm, text="Confirm Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
+        self.cpwd.place(x=100, y=200)
 
-        cpwdEty = tk.Entry(self.fm, font="lucida 20 bold")
-        cpwdEty.place(x=400, y=200)
+        self.cpwdEty = tk.Entry(self.fm, font="lucida 20 bold", show="*")
+        self.cpwdEty.place(x=400, y=200)
 
         # save button
-        tk.Button(self.acc, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2").place(x=200, y=550)
+        saveBtn = tk.Button(self.acc, text="Save Changes", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.savePass)
+        saveBtn.place(x=200, y=550)
+        saveBtn.bind("<Return>", self.savePass)
 
         # back button
-        tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=600, y=550)
+        bkBtn = tk.Button(self.acc, text="BACK", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.back).place(x=600, y=550)   
+        bkBtn.bind("<Return>", self.back)    
+        
 
-    def savePass(self):
+    def savePass(self, event=None):
 
-        # password change code...
-        pass
+        pwd = self.pwdEty.get()
+        cpwd = self.cpwdEty.get()
+
+        if len(pwd) < 8:
+            tmsg.showerror("Password Length", "Password should be at least 8 characters long.")
+            return
+    
+        if pwd != cpwd:
+            tmsg.showerror("ERROR","Password do not match.\n\nTry Again")
+            return
+        
+        try:
+            sql="""update login set pwd = %s where username = %s"""
+            values = (pwd, self.username)
+            cur1.execute(sql, values)
+            con1.commit()
+            tmsg.showinfo("Success","Password Changed Successfully")
+        except Exception as e:
+            tmsg.showerror("DATABASE ERROR",str(e))
+
+        self.acc.destroy()
+        self.parent.destroy()
+
+        login = tk.Tk()
+        loginWindow(login)
+        login.mainloop()
 
 
 
@@ -514,7 +569,7 @@ class profile:
 # testing
 
 root = tk.Tk()
-# app = loginWindow(root)
+app = loginWindow(root)         
 # app.signup()
-app = mainWindow(root, "Shubham")                                    
+# app = mainWindow(root, "Shubham")                                    
 root.mainloop()

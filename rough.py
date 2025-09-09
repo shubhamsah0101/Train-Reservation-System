@@ -66,7 +66,9 @@ sql="select * from login where username = 'Shubham1'"
 
 cur1.execute(sql)
 rec = cur1.fetchall()
-print(rec[0][0])
+
+str = "Shubham"
+print(len(str))
 
 # for i in range(len(rec)):
 #     for j in range(i):
