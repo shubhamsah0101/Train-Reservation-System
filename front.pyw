@@ -312,31 +312,57 @@ class mainWindow:
     # Book Ticket Button
     def bt(self, event=None):
 
+        # heading
         tk.Label(self.f2, text="Choose Train", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
 
-        self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=150, background="#ff6600")
+        # main frame
+        self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=100, background="#ff6600")
         self.frm.place(x=10, y=60)
 
         # source station
-        tk.Label(self.frm, text="From : ", font="lucida 18 bold", background="#ff6600").place(x=20, y=30)
-        sor = tk.Entry(self.frm, font="lucida 18 bold")
-        sor.place(x=110, y=30)
+        self.sor = tk.Entry(self.frm, font="lucida 18 bold")
+        self.sor.insert(0, "From")
+        self.sor.place(x=30, y=35)
+
+        # swap button for stations
+        self.swp = tk.Button(self.frm, text="⇆", font="lucida 16 bold", padx=10, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.swap)
+        self.swp.place(x=320, y=25)
 
         # destinatoin station
-        tk.Label(self.frm, text="To : ", font="lucida 18 bold", background="#ff6600").place(x=20, y=90)
-        des = tk.Entry(self.frm, font="lucida 18 bold")
-        des.place(x=110, y=90)
+        self.des = tk.Entry(self.frm, font="lucida 18 bold")
+        self.des.insert(0, "To")
+        self.des.place(x=400, y=35)
 
-         # select date
-        tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=600, y=30)
-        cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
-        cal.place(x=800, y=30)
+        # select date
+        tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
+        self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
+        self.cal.place(x=800, y=35)
 
         # search button
-        srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2")
-        srhBtn.place(x=1000, y=25)
+        self.srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.search)
+        self.srhBtn.place(x=1000, y=25)
 
+    # search button function
+    def search(self, event=None):
+        
+        print(self.sor.get(), self.des.get())
+
+    # swap button function
+    def swap(self, event=None):
+
+        # store the values
+        self.sr = self.sor.get()
+        self.dt = self.des.get()
+
+        # delete the previous values
+        self.sor.delete(0, tk.END)
+        self.des.delete(0, tk.END)
+
+        # swap values
+        self.sor.insert(0, self.dt)
+        self.des.insert(0, self.sr)
        
 
 
