@@ -1,39 +1,41 @@
-import tkinter as tk
-from tkinter import *
-from PIL import Image, ImageTk
-from tkcalendar import DateEntry
+# import tkinter as tk
 
-import mysql.connector as con
+# root = tk.Tk()
 
-root = Tk()
+# root.geometry("400x400")
+# root.maxsize(400, 400)
+# root.minsize(400, 400)
 
-root.geometry("300x300")
-root.maxsize(300, 300)
-root.minsize(300, 300)
-cal = DateEntry(root, width=6, font="lucida 18 bold")
-cal.pack()
+# canva = tk.Canvas(root, bg = "white", width=300, height=300)
+# canva.pack(side="left", expand=True, fill="both")
 
-def getDate():
-    date = cal.get_date()
-    print(date)
+# vs = tk.Scrollbar(root, orient="vertical", command=canva.yview)
+# vs.pack(side="right", fill="y")
 
-tk.Button(root, text="click", command=getDate).pack()
+# canva.configure(yscrollcommand=vs.set)
 
-root.mainloop()
+# canva.config(scrollregion=(0, 0, 1000, 1000))
 
-# con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
-# cur1 = con1.cursor()
+# for i in range(20):
+#     x=50*i
+#     y=50*i
+#     canva.create_text(x, y, text="shubham "+str(i))
 
-# con2 = con.connect(host="localhost", user="root", password="shubham@1234", database="trustbank")
-# cur2 = con2.cursor()
+# root.mainloop()
 
-# sql1="select * from login where username = 'Shubham1'"
-# sql2="select * from cust where acno = 10001"
+from datetime import datetime
+import email
+import re
 
-# cur1.execute(sql1)
-# rec1 = cur1.fetchall()
-# print(rec1)
+a="abc.def@gmail.com"
 
-# cur2.execute(sql2)
-# rec2 = cur2.fetchall()
-# print(rec2)
+b=r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'
+
+c="abc.defgmaul.com"
+
+# print(re.search(b, c))
+
+if re.search(b, c):
+    print("Yes")
+else:
+    print("No")

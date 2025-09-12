@@ -3,6 +3,8 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
 from tkcalendar import DateEntry
+from datetime import datetime
+import re # to check email formate
 
 # MySQL Connection
 import mysql.connector as con
@@ -188,9 +190,67 @@ class loginWindow:
         pwd     = self.entry2["Password"].get()
         cpwd    = self.entry2["Confirm Password"].get()
         
+        # check empty fields
         if not fname or not uname or not gender or not dob or not address or not pincode or not city or not state or not mob or not mail or not pwd or not cpwd:
             tmsg.showwarning("Incomplete","Please fill all the required fields.")
             return
+        
+        # check full name
+        if (not str(fname).isalpha()) and len(str(fname)) <= 50:
+            tmsg.showerror("Incorrect Formate", "Full Name should contain only Characters(Uppercase and Lower case)")
+            return
+        
+        # check user name
+        if (not str(uname).isalnum()) and len(str(uname)) <= 50:
+            tmsg.showerror("Incorrect Formate", "User Name should have only Characters (Uppercase and Lower case) and Numbers (0-9)")
+            return
+        
+        # check gender
+        if len(str(gender)) == 1 and (gender == 'M' or gender == 'F'):
+            tmsg.showerror("Incorrect Formate", "Gender Should be M (MALE) or F (FEMALE)")
+            return
+        
+        # check dob
+        format = "%Y-%m-%d"
+        f = True
+        try:
+            f = bool(datetime.strptime(dob, format))
+        except ValueError as v:
+            tmsg.showerror("Incorrect Formate", "Invalid Date")
+            f = False
+            return
+        
+        # check address
+        if (not str(address).isalnum()) and len(str(address)) <= 50:
+            tmsg.showerror("Incorrect Formate", "Address should have only Characters (Uppercase and Lower case), Numbers (0-9), '/' and '-'")
+            return
+        
+        # check pin code
+        if (not str(pincode).isnumeric()) and len(str(pincode)) <= 6:
+            tmsg.showerror("Incorrect Formate", "PIN CODE should have numbers (0-9) and of 6-digits.")
+            return
+        
+        # check city
+        if (not str(city).isalpha()) and len(str(city)) <= 50:
+            tmsg.showerror("Incorrect Formate", "City should contain only Characters(Uppercase and Lower case)")
+            return
+        
+        # check state
+        if (not str(state).isalpha()) and len(str(state)) <= 50:
+            tmsg.showerror("Incorrect Formate", "State should contain only Characters(Uppercase and Lower case)")
+            return
+        
+        # check mobile
+        if (not str(mob).isnumeric()) and len(str(mob)) <= 10:
+            tmsg.showerror("Incorrect Formate", "Mobile Number should have numbers (0-9) and of 10-digits.")
+            return
+        
+        # check email
+        a = r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'
+        if not re.search(a, mail):
+            tmsg.showerror("Invalid E-mail", "E-mail address should be like 'example.one@mail.com'")
+            return
+
         
         if len(pwd) < 8:
             tmsg.showerror("Password Length", "Password should be at least 8 characters long.")
@@ -315,7 +375,7 @@ class mainWindow:
         # heading
         tk.Label(self.f2, text="Choose Train", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
 
-        # main frame
+        # frame for train search
         self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=100, background="#ff6600")
         self.frm.place(x=10, y=60)
 
@@ -343,6 +403,10 @@ class mainWindow:
         self.srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
         cursor="hand2", command=self.search)
         self.srhBtn.place(x=1000, y=25)
+
+        # frame to show available trains
+        fmt = tk.Frame(self.f2, relief="ridge", background="#fff5e6", width=1155, height=340)
+        fmt.place(x=10, y=180)
 
     # search button function
     def search(self, event=None):
@@ -627,6 +691,7 @@ class profile:
 # testing
 
 root = tk.Tk()
-# app = loginWindow(root)
-app = mainWindow(root, "Shubham")                                    
+app = loginWindow(root)
+app.signup()
+# app = mainWindow(root, "Shubham")                                    
 root.mainloop()
