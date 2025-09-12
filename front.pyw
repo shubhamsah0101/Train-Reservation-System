@@ -196,52 +196,49 @@ class loginWindow:
             return
         
         # check full name
-        if (not str(fname).isalpha()) and len(str(fname)) <= 50:
+        if not str(fname).isalpha() or len(str(fname)) > 50:
             tmsg.showerror("Incorrect Formate", "Full Name should contain only Characters(Uppercase and Lower case)")
             return
         
         # check user name
-        if (not str(uname).isalnum()) and len(str(uname)) <= 50:
+        if not str(uname).isalnum() and len(str(uname)) > 50:
             tmsg.showerror("Incorrect Formate", "User Name should have only Characters (Uppercase and Lower case) and Numbers (0-9)")
             return
         
         # check gender
-        if len(str(gender)) == 1 and (gender == 'M' or gender == 'F'):
+        if len(str(gender)) != 1 or gender not in ['M', 'F']:
             tmsg.showerror("Incorrect Formate", "Gender Should be M (MALE) or F (FEMALE)")
             return
         
         # check dob
-        format = "%Y-%m-%d"
-        f = True
         try:
-            f = bool(datetime.strptime(dob, format))
+            datetime.strptime(dob, "%Y-%m-%d")
         except ValueError as v:
             tmsg.showerror("Incorrect Formate", "Invalid Date")
-            f = False
             return
         
         # check address
-        if (not str(address).isalnum()) and len(str(address)) <= 50:
-            tmsg.showerror("Incorrect Formate", "Address should have only Characters (Uppercase and Lower case), Numbers (0-9), '/' and '-'")
+        if len(str(address)) > 50:
+            tmsg.showerror("Incorrect Formate", "Address should have only Characters (Uppercase and Lower case), Numbers (0-9)")
             return
         
         # check pin code
-        if (not str(pincode).isnumeric()) and len(str(pincode)) <= 6:
+        if not str(pincode).isnumeric() or len(str(pincode)) != 6:
             tmsg.showerror("Incorrect Formate", "PIN CODE should have numbers (0-9) and of 6-digits.")
             return
         
         # check city
-        if (not str(city).isalpha()) and len(str(city)) <= 50:
+        if not str(city).isalpha() or len(str(city)) > 50:
             tmsg.showerror("Incorrect Formate", "City should contain only Characters(Uppercase and Lower case)")
             return
         
         # check state
-        if (not str(state).isalpha()) and len(str(state)) <= 50:
+        if not str(state).isalpha() or len(str(state)) > 50:
             tmsg.showerror("Incorrect Formate", "State should contain only Characters(Uppercase and Lower case)")
             return
         
         # check mobile
-        if (not str(mob).isnumeric()) and len(str(mob)) <= 10:
+        if not str(mob).isnumeric() or len(str(mob)) != 10:
             tmsg.showerror("Incorrect Formate", "Mobile Number should have numbers (0-9) and of 10-digits.")
             return
         
@@ -253,6 +250,7 @@ class loginWindow:
 
         
         if len(pwd) < 8:
+            # print(len(pwd))
             tmsg.showerror("Password Length", "Password should be at least 8 characters long.")
             return
     

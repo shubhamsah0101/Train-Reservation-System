@@ -35,7 +35,7 @@ c="abc.defgmaul.com"
 
 # print(re.search(b, c))
 
-if re.search(b, c):
+if re.search(b, a):
     print("Yes")
 else:
     print("No")
