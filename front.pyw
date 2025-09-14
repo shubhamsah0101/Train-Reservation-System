@@ -196,61 +196,62 @@ class loginWindow:
             return
         
         # check full name
-        if not str(fname).isalpha() or len(str(fname)) > 50:
-            tmsg.showerror("Incorrect Formate", "Full Name should contain only Characters(Uppercase and Lower case)")
+        fp = r'^[a-zA-Z]'   # full name pattern
+        if not re.search(fp, mail) and len(str(fname)):
+            tmsg.showerror("Invalid E-mail", "User Name should have only Characters (Uppercase and Lower case)")
             return
         
         # check user name
         if not str(uname).isalnum() and len(str(uname)) > 50:
-            tmsg.showerror("Incorrect Formate", "User Name should have only Characters (Uppercase and Lower case) and Numbers (0-9)")
+            tmsg.showerror("Invalid Formate", "User Name should have only Characters (Uppercase and Lower case) and Numbers (0-9)")
             return
         
         # check gender
-        if len(str(gender)) != 1 or gender not in ['M', 'F']:
-            tmsg.showerror("Incorrect Formate", "Gender Should be M (MALE) or F (FEMALE)")
+        '''make radio button'''
+        if len(str(gender)) != 1 or gender not in ['M', 'F', 'm', 'f']:
+            tmsg.showerror("Invalid Formate", "Gender Should be M (MALE) or F (FEMALE)")
             return
         
-        # check dob
+        # check dob 
+        '''make drop down calander'''
         try:
             datetime.strptime(dob, "%Y-%m-%d")
         except ValueError as v:
-            tmsg.showerror("Incorrect Formate", "Invalid Date")
+            tmsg.showerror("Invalid Formate", "Invalid Date")
             return
         
         # check address
         if len(str(address)) > 50:
-            tmsg.showerror("Incorrect Formate", "Address should have only Characters (Uppercase and Lower case), Numbers (0-9)")
+            tmsg.showerror("Invalid Formate", "Address should have only Characters (Uppercase and Lower case), Numbers (0-9)")
             return
         
         # check pin code
         if not str(pincode).isnumeric() or len(str(pincode)) != 6:
-            tmsg.showerror("Incorrect Formate", "PIN CODE should have numbers (0-9) and of 6-digits.")
+            tmsg.showerror("Invalid Formate", "PIN CODE should have numbers (0-9) and of 6-digits.")
             return
         
         # check city
         if not str(city).isalpha() or len(str(city)) > 50:
-            tmsg.showerror("Incorrect Formate", "City should contain only Characters(Uppercase and Lower case)")
+            tmsg.showerror("Invalid Formate", "City should contain only Characters(Uppercase and Lower case)")
             return
         
         # check state
         if not str(state).isalpha() or len(str(state)) > 50:
-            tmsg.showerror("Incorrect Formate", "State should contain only Characters(Uppercase and Lower case)")
+            tmsg.showerror("Invalid Formate", "State should contain only Characters(Uppercase and Lower case)")
             return
         
         # check mobile
         if not str(mob).isnumeric() or len(str(mob)) != 10:
-            tmsg.showerror("Incorrect Formate", "Mobile Number should have numbers (0-9) and of 10-digits.")
+            tmsg.showerror("Invalid Formate", "Mobile Number should have numbers (0-9) and of 10-digits.")
             return
         
         # check email
-        a = r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'
-        if not re.search(a, mail):
+        ep = r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'  # email pattern
+        if not re.search(ep, mail):
             tmsg.showerror("Invalid E-mail", "E-mail address should be like 'example.one@mail.com'")
             return
-
         
         if len(pwd) < 8:
-            # print(len(pwd))
             tmsg.showerror("Password Length", "Password should be at least 8 characters long.")
             return
     
@@ -281,8 +282,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        # self.username = username
-        self.username = "Shubham2"
+        self.username = username
+        # self.username = "Shubham2"
 
         # title
         self.root.title("Main Menu")
@@ -690,6 +691,6 @@ class profile:
 
 root = tk.Tk()
 app = loginWindow(root)
-app.signup()
+# app.signup()
 # app = mainWindow(root, "Shubham")                                    
 root.mainloop()

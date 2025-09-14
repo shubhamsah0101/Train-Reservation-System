@@ -23,13 +23,13 @@
 
 # root.mainloop()
 
-from datetime import datetime
-import email
+# from datetime import datetime
+# import email
 import re
 
-a="abc.def@gmail.com"
+a="Shubham Kumar Sah"
 
-b=r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'
+b=r'^[a-zA-Z]'
 
 c="abc.defgmaul.com"
 
