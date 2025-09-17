@@ -125,15 +125,31 @@ class loginWindow:
         tk.Label(self.sign,text="Create Your Account",  font="lucida 20 underline", bg="#ffdab9", fg="#001f3f").place(relx=0.5, rely=0.05, anchor="center")
 
         # user details entry
-        labels1 = ["Full Name", "Username", "Gender (M/F)", "Date Of Birth (YYYY-MM-DD)", "Address", "PIN CODE"]
+        labels1 = ["Full Name", "Username", "Gender", "Date Of Birth", "Address", "PIN CODE"]
         self.entry1 = {}
 
         i = 1
         for label in labels1:
             tk.Label(fr, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
-            ent = tk.Entry(fr, font="lucida 16 bold")
-            ent.grid(row=i, column=1, padx=10, pady=20)
-            self.entry1[label] = ent
+            if label == "Gender":
+                self.genderVar = tk.StringVar(value="M")
+
+                male = tk.Radiobutton(fr, text="MALE", variable=self.genderVar, value="M", font="lucida 16 bold", bg="#ffdab9", fg="#333333",  activebackground="#ffdab9")
+                male.place(x=200, y=180)
+
+                female = tk.Radiobutton(fr, text="FEMALE", variable=self.genderVar, value="F", font="lucida 16 bold", bg="#ffdab9", fg="#333333", activebackground="#ffdab9")
+                female.place(x=320, y=180)
+
+                self.entry1[label] = self.genderVar
+
+            elif label == "Date Of Birth":
+                self.d = DateEntry(fr, width=10, font="lucida 18 bold", date_pattern="yyyy-mm-dd")
+                self.d.place(x=220, y=255)
+
+            else:
+                ent = tk.Entry(fr, font="lucida 16 bold")
+                ent.grid(row=i, column=1, padx=10, pady=20)
+                self.entry1[label] = ent
             i += 1
 
         labels2 = ["City", "State", "Mobile", "Email", "Password", "Confirm Password"]
@@ -179,8 +195,8 @@ class loginWindow:
         # obtaining all the user data to store in database
         fname   = self.entry1["Full Name"].get()        
         uname   = self.entry1["Username"].get()
-        gender  = self.entry1["Gender (M/F)"].get()
-        dob     = self.entry1["Date Of Birth (YYYY-MM-DD)"].get()
+        gender  = self.entry1["Gender"].get()
+        dob     = self.d.get()
         address = self.entry1["Address"].get()
         pincode = self.entry1["PIN CODE"].get()
         city    = self.entry2["City"].get()
@@ -196,8 +212,8 @@ class loginWindow:
             return
         
         # check full name
-        fp = r'^[a-zA-Z]'   # full name pattern
-        if not re.search(fp, mail) and len(str(fname)):
+        fp = r'^[a-z A-Z]'   # full name pattern
+        if not re.search(fp, mail) and len(str(fname)) > 50:
             tmsg.showerror("Invalid E-mail", "User Name should have only Characters (Uppercase and Lower case)")
             return
         
@@ -207,13 +223,11 @@ class loginWindow:
             return
         
         # check gender
-        '''make radio button'''
         if len(str(gender)) != 1 or gender not in ['M', 'F', 'm', 'f']:
             tmsg.showerror("Invalid Formate", "Gender Should be M (MALE) or F (FEMALE)")
             return
         
         # check dob 
-        '''make drop down calander'''
         try:
             datetime.strptime(dob, "%Y-%m-%d")
         except ValueError as v:
