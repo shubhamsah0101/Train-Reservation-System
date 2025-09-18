@@ -131,6 +131,7 @@ class loginWindow:
         i = 1
         for label in labels1:
             tk.Label(fr, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").grid(row=i, column=0, padx=10, pady=20)
+            
             if label == "Gender":
                 self.genderVar = tk.StringVar(value="M")
 
@@ -150,6 +151,7 @@ class loginWindow:
                 ent = tk.Entry(fr, font="lucida 16 bold")
                 ent.grid(row=i, column=1, padx=10, pady=20)
                 self.entry1[label] = ent
+
             i += 1
 
         labels2 = ["City", "State", "Mobile", "Email", "Password", "Confirm Password"]
@@ -297,7 +299,7 @@ class mainWindow:
         
         self.root = root
         self.username = username
-        # self.username = "Shubham2"
+        self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -551,10 +553,30 @@ class profile:
         
         for i, label in enumerate(labels1):
             tk.Label(self.f1, text=label+" :", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333").place(x=30, y=pyL1)
-            ent = tk.Entry(self.f1, font="lucida 16 bold")
-            ent.place(x=200, y=pyD1)
-            ent.insert(0, self.data1[i])
-            self.d1[label] = ent
+
+            if label == "Gender":
+                self.genVar = tk.StringVar(value=self.data1[i])
+
+                m = tk.Radiobutton(self.f1, text="MALE", variable=self.genVar, value="M", font="lucida 16 bold", bg="#ffdab9", fg="#333333",  activebackground="#ffdab9")
+                m.place(x=200, y=pyD1)
+
+                fm = tk.Radiobutton(self.f1, text="FEMALE", variable=self.genVar, value="F", font="lucida 16 bold", bg="#ffdab9", fg="#333333",  activebackground="#ffdab9")
+                fm.place(x=320, y=pyD1)
+
+                self.d1[label] = self.genVar
+            
+            elif label == "Date Of Birth":
+                self.dt = DateEntry(self.f1, width=10, font="lucida 18 bold", date_pattern="yyyy-mm-dd")
+                self.dt.set_date(self.data1[i])
+                self.dt.place(x=200, y=pyD1)
+                self.d1[label] = self.dt
+
+            else:
+                ent = tk.Entry(self.f1, font="lucida 16 bold")
+                ent.place(x=200, y=pyD1)
+                ent.insert(0, self.data1[i])
+                self.d1[label] = ent        
+    
             pyL1 += 50
             pyD1 += 50
 
@@ -591,17 +613,19 @@ class profile:
     def saveChange(self, event=None):
 
         # obtaining user data from textbox
-        fname = self.d1["Full Name"].get()
-        uname = self.d1["Username"].get()
-        gender = self.d1["Gender"].get()
-        dob = self.d1["Date Of Birth"].get()
-        add = self.d1["Address"].get()
+        fname   = self.d1["Full Name"].get()
+        uname   = self.d1["Username"].get()
+        gender  = self.d1["Gender"].get()
+        dob     = self.dt.get()
+        add     = self.d1["Address"].get()
 
-        pin = self.d2["PIN CODE"].get()
-        city = self.d2["City"].get()
-        state = self.d2["State"].get()
-        mob = self.d2["Mobile"].get()
-        email = self.d2["Email"].get()
+        pin     = self.d2["PIN CODE"].get()
+        city    = self.d2["City"].get()
+        state   = self.d2["State"].get()
+        mob     = self.d2["Mobile"].get()
+        email   = self.d2["Email"].get()
+
+        # print(fname, uname, gender, dob, add, pin, city, state, mob, email)
         
         # updating user data to database
         try:
@@ -704,7 +728,7 @@ class profile:
 # testing
 
 root = tk.Tk()
-app = loginWindow(root)
+# app = loginWindow(root)
 # app.signup()
-# app = mainWindow(root, "Shubham")                                    
+app = mainWindow(root, "Shubham")                                    
 root.mainloop()
