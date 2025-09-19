@@ -9,12 +9,20 @@ import re # to check email formate
 # MySQL Connection
 import mysql.connector as con
 
+
+
 # Database connection and data transfer and retrival
-con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
-cur1 = con1.cursor()
+# con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
+# cur1 = con1.cursor()
+
+
 
 # class for Login/Signup window
 class loginWindow:
+
+    def getDB(self):
+        con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
+        return con1, con1.cursor()
 
     # login/signup window
     def __init__(self, root):
@@ -79,30 +87,27 @@ class loginWindow:
         pwd = self.password.get()
 
         # obtaining username and password from database for user verification
-        sql="select * from login"
-        cur1.execute(sql)
-        rec = cur1.fetchall()
-        for i in range(len(rec)):
-            u=rec[i][2]
-            p=rec[i][11]
-            if ur == "" or pwd == "":
-                tmsg.showwarning("Incomplete","Please Enter Correct Input.")
-                break
-            elif ur == u:
-                if pwd == p:
-                    self.root.destroy()     # clase login window
-                    # opening main window
-                    new_root = tk.Tk()
-                    mainWindow(new_root, ur)
-                    new_root.mainloop()
-                    break
-                else:
-                    tmsg.showerror("ERROR","Invalid Password! Try Again...")
-                    break
+        con1, cur1 = self.getDB()
+        sql = "SELECT username, pwd FROM login WHERE username = %s"
+        cur1.execute(sql, (ur,))
+        rec = cur1.fetchone()
+        # print(ur, pwd, rec)
+        # cur1.close()
+        con1.close()
+
+        if not ur or not pwd:
+            tmsg.showwarning("Incomplete", "Please Enter both Username and Password")
+        elif rec is None:
+            tmsg.showerror("ERROR", "Invalid Username. TRY AGAIN...")
+        elif pwd == rec[1]:
+            self.root.destroy() 
+            new_root = tk.Tk()
+            mainWindow(new_root, ur)
+            new_root.mainloop()
         else:
-            tmsg.showerror("ERROR","Invalid Username! Try Again...")
+            tmsg.showerror("ERROR", "Invalid Password. TRY AGAIN...")
 
-
+        
     # Signin button event
     def signup(self, event=None):
 
@@ -214,13 +219,13 @@ class loginWindow:
             return
         
         # check full name
-        fp = r'^[a-z A-Z]'   # full name pattern
-        if not re.search(fp, mail) and len(str(fname)) > 50:
+        # fp = r'^[a-z A-Z]'   # full name pattern
+        if not re.search(r'[A-Za-z ]{1,50}', fname):
             tmsg.showerror("Invalid E-mail", "User Name should have only Characters (Uppercase and Lower case)")
             return
         
         # check user name
-        if not str(uname).isalnum() and len(str(uname)) > 50:
+        if not (uname.isalnum()) or len(str(uname)) > 50:
             tmsg.showerror("Invalid Formate", "User Name should have only Characters (Uppercase and Lower case) and Numbers (0-9)")
             return
         
@@ -262,7 +267,7 @@ class loginWindow:
             return
         
         # check email
-        ep = r'^[a-zA-Z0-9]+.+[a-zA-Z0-9]+@+[a-z]+.+[a-z]'  # email pattern
+        ep = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'  # email pattern
         if not re.search(ep, mail):
             tmsg.showerror("Invalid E-mail", "E-mail address should be like 'example.one@mail.com'")
             return
@@ -276,11 +281,13 @@ class loginWindow:
             return
         
         try:
+            cur1, con1 = self.getDB()
             sql="""insert into login(fullname, username, gender, dob, address, pin, city, state, mobile, email, pwd)
                    values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             values = (fname, uname, gender, dob, address, pincode, city, state, mob, mail, pwd)
             cur1.execute(sql, values)
             con1.commit()
+            con1.close()
             tmsg.showinfo("Success","Account Created Successfully")
             self.sign.destroy()
         except Exception as e:
@@ -299,7 +306,7 @@ class mainWindow:
         
         self.root = root
         self.username = username
-        self.username = "Shubham1"
+        # self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -470,10 +477,11 @@ class profile:
         self.f1.place(x=10, y=100)
 
         # SQL query to get user data
+        con1, cur1 = loginWindow.getDB(self)
         sql = "select * from login where username = %s"
         cur1.execute(sql, (username,))
-
         rec = cur1.fetchone()   # fetching all data
+        con1.close()
         
         if rec is None:   # no user found
             tmsg.showerror("Error", f"User '{username}' not found in database!")
@@ -728,7 +736,7 @@ class profile:
 # testing
 
 root = tk.Tk()
-# app = loginWindow(root)
+app = loginWindow(root)
 # app.signup()
-app = mainWindow(root, "Shubham")                                    
+# app = mainWindow(root, "Shubham")                                    
 root.mainloop()

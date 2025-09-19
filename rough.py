@@ -26,3 +26,23 @@ btn.pack()
 
 root.mainloop()
 
+# for i in range(len(rec)):
+        #     u=rec[i][2]
+        #     p=rec[i][11]
+        #     if ur == "" or pwd == "":
+        #         tmsg.showwarning("Incomplete","Please Enter Correct Input.")
+        #         break
+        #     elif ur == u:
+        #         if pwd == p:
+        #             self.root.destroy()     # clase login window
+        #             # opening main window
+        #             new_root = tk.Tk()
+        #             mainWindow(new_root, ur)
+        #             new_root.mainloop()
+        #             break
+        #         else:
+        #             tmsg.showerror("ERROR","Invalid Password! Try Again...")
+        #             break
+        # else:
+        #     tmsg.showerror("ERROR","Invalid Username! Try Again...")
+
