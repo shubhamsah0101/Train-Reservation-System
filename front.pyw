@@ -298,160 +298,6 @@ class loginWindow:
         root.mainloop()
 
 
-# class for main window
-class mainWindow:
-
-    # Menu Display
-    def __init__(self, root, username):
-        
-        self.root = root
-        self.username = username
-        # self.username = "Shubham1"
-
-        # title
-        self.root.title("Main Menu")
-
-        # geometry of window
-        self.root.geometry("1200x750")
-        self.root.maxsize(1200, 750)
-        self.root.minsize(1200, 750)
-        self.root.config(bg="#fff5e6")
-
-        # icon
-        icon = tk.PhotoImage(file="train_icon.png")
-        self.root.iconphoto(True, icon)
-
-        # greeting
-        tk.Label(self.root, text="Welcome, {}".format(username), font="lucida 20 bold", background="#fff5e6").place(x=460, y=10)
-
-        # FRAMES 
-        # menu frame
-        f1 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=63, background="#003366")
-        f1.place(x=10, y=80)
-
-        # frame for displaying menu option
-        self.f2 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=540, background="#ffdab9")
-        self.f2.place(x=10, y=170)
-
-        # BUTTONS
-        # my account
-        myBtn = tk.Button(self.root, text="MY ACCOUNT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.account)
-        myBtn.place(x=10, y=15)
-        myBtn.bind("<Return>", self.account)
-
-        # log out
-        logoutBtn = tk.Button(self.root, text="LOG OUT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.logout)
-        logoutBtn.place(x=1040, y=15)
-        logoutBtn.bind("<Return>", self.logout)
-
-        # button for book ticket
-        bookBtn = tk.Button(f1, text="BOOK TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.bt)
-        bookBtn.grid(row=1, column=1, padx=10, pady=10)
-        bookBtn.bind("<Return>", self.bt)
-
-        # button for cancel ticket
-        cancelBtn = tk.Button(f1, text="CANCEL TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2")
-        cancelBtn.grid(row=1, column=2, padx=10, pady=10)
-
-        # button for PNR status
-        pnrBtn = tk.Button(f1, text="PNR STATUS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2")
-        pnrBtn.grid(row=1, column=3, padx=10, pady=10)
-
-        # button for train schedule
-        scheduleBtn = tk.Button(f1, text="TRAIN SCHEDULE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2")
-        scheduleBtn.grid(row=1, column=4, padx=10, pady=10)
-
-        # button for track train 
-        trackBtn = tk.Button(f1, text="TRACK TRAIN", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2")
-        trackBtn.grid(row=1, column=5, padx=10, pady=10)
-
-
-    # COMMAND FOR EACH BUTTON
-    # my account button
-    def account(self, event=None):
-        profile(self.root, self.username)
-
-
-    # log out button
-    def logout(self, event=None):
-
-        # destroy main menu
-        self.root.destroy()
-
-        # opening login window
-        log = tk.Tk()
-        loginWindow(log)
-        log.mainloop()
-
-
-    # Book Ticket Button
-    def bt(self, event=None):
-
-        # heading
-        tk.Label(self.f2, text="Choose Train", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
-
-        # frame for train search
-        self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=100, background="#ff6600")
-        self.frm.place(x=10, y=60)
-
-        # source station
-        self.sor = tk.Entry(self.frm, font="lucida 18 bold")
-        self.sor.insert(0, "From")
-        self.sor.place(x=30, y=35)
-
-        # swap button for stations
-        self.swp = tk.Button(self.frm, text="⇆", font="lucida 16 bold", padx=10, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.swap)
-        self.swp.place(x=320, y=25)
-
-        # destinatoin station
-        self.des = tk.Entry(self.frm, font="lucida 18 bold")
-        self.des.insert(0, "To")
-        self.des.place(x=400, y=35)
-
-        # select date
-        tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
-        self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
-        self.cal.place(x=800, y=35)
-
-        # search button
-        self.srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
-        cursor="hand2", command=self.search)
-        self.srhBtn.place(x=1000, y=25)
-
-        # frame to show available trains
-        fmt = tk.Frame(self.f2, relief="ridge", background="#fff5e6", width=1155, height=340)
-        fmt.place(x=10, y=180)
-
-    # search button function
-    def search(self, event=None):
-        
-        print(self.sor.get(), self.des.get())
-
-    # swap button function
-    def swap(self, event=None):
-
-        # store the values
-        self.sr = self.sor.get()
-        self.dt = self.des.get()
-
-        # delete the previous values
-        self.sor.delete(0, tk.END)
-        self.des.delete(0, tk.END)
-
-        # swap values
-        self.sor.insert(0, self.dt)
-        self.des.insert(0, self.sr)
-       
-
-
 # class for My Profile
 class profile:
 
@@ -637,10 +483,12 @@ class profile:
         
         # updating user data to database
         try:
+            con1, cur1 = loginWindow.getDB(self)
             sql = "update login set fullname = %s, username = %s, gender = %s, dob = %s, address = %s, pin = %s, city = %s, state = %s, mobile = %s, email = %s where id = %s"
             values = (fname, uname, gender, dob, add, pin, city, state, mob, email, self.id)
             cur1.execute(sql, values)
             con1.commit()   
+            con1.close()
 
             tmsg.showinfo("Update", "Your Profile updated successfully.")
 
@@ -715,10 +563,12 @@ class profile:
             return
         
         try:
+            con1, cur1 = loginWindow.getDB(self)
             sql="""update login set pwd = %s where username = %s"""
             values = (pwd, self.username)
             cur1.execute(sql, values)
             con1.commit()
+            con1.close()
             tmsg.showinfo("Success","Password Changed Successfully")
         except Exception as e:
             tmsg.showerror("DATABASE ERROR",str(e))
@@ -729,6 +579,162 @@ class profile:
         login = tk.Tk()
         loginWindow(login)
         login.mainloop()
+
+
+# class for main window
+class mainWindow:
+
+    # Menu Display
+    def __init__(self, root, username):
+        
+        self.root = root
+        self.username = username
+        # self.username = "Shubham1"
+
+        # title
+        self.root.title("Main Menu")
+
+        # geometry of window
+        self.root.geometry("1200x750")
+        self.root.maxsize(1200, 750)
+        self.root.minsize(1200, 750)
+        self.root.config(bg="#fff5e6")
+
+        # icon
+        icon = tk.PhotoImage(file="train_icon.png")
+        self.root.iconphoto(True, icon)
+
+        # greeting
+        tk.Label(self.root, text="Welcome, {}".format(username), font="lucida 20 bold", background="#fff5e6").place(x=460, y=10)
+
+        # FRAMES 
+        # menu frame
+        f1 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=63, background="#003366")
+        f1.place(x=10, y=80)
+
+        # frame for displaying menu option
+        self.f2 = tk.Frame(self.root, bd=1, relief="ridge", width=1180, height=540, background="#ffdab9")
+        self.f2.place(x=10, y=170)
+
+        # BUTTONS
+        # my account
+        myBtn = tk.Button(self.root, text="MY ACCOUNT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.account)
+        myBtn.place(x=10, y=15)
+        myBtn.bind("<Return>", self.account)
+
+        # log out
+        logoutBtn = tk.Button(self.root, text="LOG OUT", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.logout)
+        logoutBtn.place(x=1040, y=15)
+        logoutBtn.bind("<Return>", self.logout)
+
+        # button for book ticket
+        bookBtn = tk.Button(f1, text="BOOK TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.bt)
+        bookBtn.grid(row=1, column=1, padx=10, pady=10)
+        bookBtn.bind("<Return>", self.bt)
+
+        # button for cancel ticket
+        cancelBtn = tk.Button(f1, text="CANCEL TICKETS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        cancelBtn.grid(row=1, column=2, padx=10, pady=10)
+
+        # button for PNR status
+        pnrBtn = tk.Button(f1, text="PNR STATUS", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        pnrBtn.grid(row=1, column=3, padx=10, pady=10)
+
+        # button for train schedule
+        scheduleBtn = tk.Button(f1, text="TRAIN SCHEDULE", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        scheduleBtn.grid(row=1, column=4, padx=10, pady=10)
+
+        # button for track train 
+        trackBtn = tk.Button(f1, text="TRACK TRAIN", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2")
+        trackBtn.grid(row=1, column=5, padx=10, pady=10)
+
+
+    # COMMAND FOR EACH BUTTON
+    # my account button
+    def account(self, event=None):
+        profile(self.root, self.username)
+
+
+    # log out button
+    def logout(self, event=None):
+
+        # destroy main menu
+        self.root.destroy()
+
+        # opening login window
+        log = tk.Tk()
+        loginWindow(log)
+        log.mainloop()
+
+
+    # Book Ticket Button
+    def bt(self, event=None):
+
+        # heading
+        tk.Label(self.f2, text="Choose Train", font="lucida 20 underline", background="#ffdab9").place(x=470, y=10)
+
+        # frame for train search
+        self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=100, background="#ff6600")
+        self.frm.place(x=10, y=60)
+
+        # source station
+        self.sor = tk.Entry(self.frm, font="lucida 18 bold")
+        self.sor.insert(0, "From")
+        self.sor.place(x=30, y=35)
+
+        # swap button for stations
+        self.swp = tk.Button(self.frm, text="⇆", font="lucida 16 bold", padx=10, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.swap)
+        self.swp.place(x=320, y=25)
+
+        # destinatoin station
+        self.des = tk.Entry(self.frm, font="lucida 18 bold")
+        self.des.insert(0, "To")
+        self.des.place(x=400, y=35)
+
+        # select date
+        tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
+        self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
+        self.cal.place(x=800, y=35)
+
+        # search button
+        self.srhBtn = tk.Button(self.frm, text="Search", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        cursor="hand2", command=self.search)
+        self.srhBtn.place(x=1000, y=25)
+
+        # frame to show available trains
+        fmt = tk.Frame(self.f2, relief="ridge", background="#fff5e6", width=1155, height=340)
+        fmt.place(x=10, y=180)
+
+    # search button function
+    def search(self, event=None):
+        
+        print(self.sor.get(), self.des.get())
+
+    # swap button function
+    def swap(self, event=None):
+
+        # store the values
+        self.sr = self.sor.get()
+        self.dt = self.des.get()
+
+        # delete the previous values
+        self.sor.delete(0, tk.END)
+        self.des.delete(0, tk.END)
+
+        # swap values
+        self.sor.insert(0, self.dt)
+        self.des.insert(0, self.sr)
+       
+
+
 
 
 
