@@ -1,5 +1,6 @@
 # modules for Python GUI
 import tkinter as tk
+from tkinter import ttk # for combobox
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
 from tkcalendar import DateEntry
@@ -8,14 +9,6 @@ import re # to check email formate
 
 # MySQL Connection
 import mysql.connector as con
-
-
-
-# Database connection and data transfer and retrival
-# con1 = con.connect(host="localhost", user="root", password="shubham@1234", database="train")
-# cur1 = con1.cursor()
-
-
 
 # class for Login/Signup window
 class loginWindow:
@@ -588,8 +581,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        self.username = username
-        # self.username = "Shubham1"
+        # self.username = username
+        self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -684,23 +677,31 @@ class mainWindow:
         self.frm = tk.Frame(self.f2, bd=1, relief="ridge", width=1155, height=100, background="#ff6600")
         self.frm.place(x=10, y=60)
 
+        # list of stations
+        stations = ['DHN - DHANBAD', 'RNC - RANCHI', 'JSME - JASIDIH', 'TATANAGAR - TATA', 'MURI - MURI', ]
+
         # source station
-        self.sor = tk.Entry(self.frm, font="lucida 18 bold")
-        self.sor.insert(0, "From")
-        self.sor.place(x=30, y=35)
+        self.sourceStation = tk.StringVar()
+        self.sourceStation.set("Select")
+
+        comSource = ttk.Combobox(self.frm, textvariable=self.sourceStation, font="lucida 18 bold", width=20, values=stations)        
+        comSource.place(x=30, y=35)
 
         # swap button for stations
-        self.swp = tk.Button(self.frm, text="⇆", font="lucida 16 bold", padx=10, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
+        self.swp = tk.Button(self.frm, text="⇆", font="lucida 18 bold", padx=10, pady=5, bg="#ff6600", fg="#002147", activebackground="#e65c00", activeforeground="white", 
         cursor="hand2", command=self.swap)
-        self.swp.place(x=320, y=25)
+        self.swp.place(x=330, y=25)
 
         # destinatoin station
-        self.des = tk.Entry(self.frm, font="lucida 18 bold")
-        self.des.insert(0, "To")
-        self.des.place(x=400, y=35)
+        self.destinationStation = tk.StringVar()
+        self.destinationStation.set("Select")
+
+        comDestination = ttk.Combobox(self.frm, textvariable=self.destinationStation, font="lucida 18 bold", width=20, values=stations)        
+        comDestination.place(x=400, y=35)
 
         # select date
         tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
+
         self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
         self.cal.place(x=800, y=35)
 
@@ -716,22 +717,18 @@ class mainWindow:
     # search button function
     def search(self, event=None):
         
-        print(self.sor.get(), self.des.get())
+        print(self.sourceStation.get(), self.destinationStation.get(), self.cal.get_date())
 
     # swap button function
     def swap(self, event=None):
+        
+        s = self.sourceStation.get()
+        d = self.destinationStation.get()
 
-        # store the values
-        self.sr = self.sor.get()
-        self.dt = self.des.get()
+        # print(s, d)
 
-        # delete the previous values
-        self.sor.delete(0, tk.END)
-        self.des.delete(0, tk.END)
-
-        # swap values
-        self.sor.insert(0, self.dt)
-        self.des.insert(0, self.sr)
+        self.sourceStation.set(d)
+        self.destinationStation.set(s)
        
 
 
@@ -742,7 +739,7 @@ class mainWindow:
 # testing
 
 root = tk.Tk()
-app = loginWindow(root)
+# app = loginWindow(root)
 # app.signup()
-# app = mainWindow(root, "Shubham")                                    
+app = mainWindow(root, "Shubham")                                    
 root.mainloop()
