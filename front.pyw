@@ -4,7 +4,7 @@ from tkinter import ttk # for combobox
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
 from tkcalendar import DateEntry
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import re # to check email formate
 
 # MySQL Connection
@@ -678,7 +678,18 @@ class mainWindow:
         self.frm.place(x=10, y=60)
 
         # list of stations
-        stations = ['DHN - DHANBAD', 'RNC - RANCHI', 'JSME - JASIDIH', 'TATA - TATANAGAR', 'MURI - MURI', ]
+        con1, cur1 = loginWindow.getDB(self)
+        sql = "select * from train_stations"
+        cur1.execute(sql)
+
+        self.rec = cur1.fetchall()
+
+        stations = []
+
+        for i in self.rec:
+            stations.append(i[2])
+
+        # print(stations)
 
         # source station
         self.sourceStation = tk.StringVar()
@@ -701,8 +712,6 @@ class mainWindow:
 
         # select date
         tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
-
-        
 
         # Today as minimum date
         today = date.today()
@@ -729,15 +738,16 @@ class mainWindow:
         self.dst = self.destinationStation.get().lower()
         self.date = self.cal.get_date()
 
-        if self.src == "select":
+        if self.src == "select" or self.src == "":
             tmsg.showwarning('Sorce Station', 'Please Select a Source Station.')
             return
-        elif self.dst == "select":
+        elif self.dst == "select" or self.dst == "":
             tmsg.showwarning('Destination', 'Please Select a Destination Station.')
             return
         elif self.src == self.dst:
             tmsg.showerror('ERROR', 'Souece and Destination should not be same.\nTry Again...')
             return
+        
         
         
 
