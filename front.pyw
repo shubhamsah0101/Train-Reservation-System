@@ -4,7 +4,7 @@ from tkinter import ttk # for combobox
 from PIL import Image, ImageTk
 import  tkinter.messagebox as tmsg
 from tkcalendar import DateEntry
-from datetime import datetime
+from datetime import date, timedelta
 import re # to check email formate
 
 # MySQL Connection
@@ -678,7 +678,7 @@ class mainWindow:
         self.frm.place(x=10, y=60)
 
         # list of stations
-        stations = ['DHN - DHANBAD', 'RNC - RANCHI', 'JSME - JASIDIH', 'TATANAGAR - TATA', 'MURI - MURI', ]
+        stations = ['DHN - DHANBAD', 'RNC - RANCHI', 'JSME - JASIDIH', 'TATA - TATANAGAR', 'MURI - MURI', ]
 
         # source station
         self.sourceStation = tk.StringVar()
@@ -702,7 +702,15 @@ class mainWindow:
         # select date
         tk.Label(self.frm, text="Date : ", font="lucida 18 bold", background="#ff6600").place(x=700, y=35)
 
-        self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold")
+        
+
+        # Today as minimum date
+        today = date.today()
+
+        # Next 60 days as maximum
+        max_day = today + timedelta(days=50)
+
+        self.cal = DateEntry(self.frm, width=6, font="lucida 18 bold", mindate = today, maxdate = max_day, year = today.year, month = today.month, day = today.day)
         self.cal.place(x=800, y=35)
 
         # search button
@@ -717,7 +725,35 @@ class mainWindow:
     # search button function
     def search(self, event=None):
         
-        print(self.sourceStation.get(), self.destinationStation.get(), self.cal.get_date())
+        self.src = self.sourceStation.get().lower()
+        self.dst = self.destinationStation.get().lower()
+        self.date = self.cal.get_date()
+
+        if self.src == "select":
+            tmsg.showwarning('Sorce Station', 'Please Select a Source Station.')
+            return
+        elif self.dst == "select":
+            tmsg.showwarning('Destination', 'Please Select a Destination Station.')
+            return
+        elif self.src == self.dst:
+            tmsg.showerror('ERROR', 'Souece and Destination should not be same.\nTry Again...')
+            return
+        
+        
+
+
+
+        print(self.src)
+        print(self.dst)
+        print(self.date)
+
+        # cur1, con1 = loginWindow.getDB(self)
+        # sql = "select * from traindetail"
+        # con1.execute(sql)
+
+        # print(self.sourceStation.get(), self.destinationStation.get(), self.cal.get_date())
+
+
 
     # swap button function
     def swap(self, event=None):
