@@ -109,9 +109,9 @@ class loginWindow:
         # creating Signup Window
         self.sign=tk.Tk()
 
-        self.sign.geometry("1250x600")
-        self.sign.maxsize(1250, 600)
-        self.sign.minsize(1250, 600)
+        self.sign.geometry("1100x600")
+        self.sign.maxsize(1100, 600)
+        self.sign.minsize(1100, 600)
         self.sign.title("Sign Up")
         self.sign.config(bg="#ffdab9")
 
@@ -166,6 +166,10 @@ class loginWindow:
             self.entry2[label] = ent
             i += 1  
 
+        # password show button
+        passShow = tk.Button(self.sign, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPass)
+        passShow.place(x=1010, y=390)
+
         # sign in button (save user data into database)
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
         signBtn.place(relx=0.5, rely=0.93, anchor="center")
@@ -188,6 +192,15 @@ class loginWindow:
         loginWindow(bk)
         bk.mainloop()
 
+    # password visibility in signup window
+    def showPass(self, event=None):
+
+        if self.entry2["Password"].cget("show") == "*":
+            self.entry2["Password"].config(show="")
+            self.entry2["Confirm Password"].config(show="")
+        else:
+            self.entry2["Password"].config(show="*")
+            self.entry2["Confirm Password"].config(show="*")
 
     # save user info in database
     def save(self, event=None):         
@@ -274,7 +287,7 @@ class loginWindow:
             return
         
         try:
-            cur1, con1 = self.getDB()
+            con1, cur1 = self.getDB()
             sql="""insert into login(fullname, username, gender, dob, address, pin, city, state, mobile, email, pwd)
                    values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             values = (fname, uname, gender, dob, address, pincode, city, state, mob, mail, pwd)
@@ -581,8 +594,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        # self.username = username
-        self.username = "Shubham1"
+        self.username = username
+        # self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -785,7 +798,7 @@ class mainWindow:
 # testing
 
 root = tk.Tk()
-# app = loginWindow(root)
+app = loginWindow(root)
 # app.signup()
-app = mainWindow(root, "Shubham")                                    
+# app = mainWindow(root, "Shubham")                                    
 root.mainloop()

@@ -35,3 +35,9 @@ select * from login;
 select * from train;
 
 select * from train_stations;
+
+update train_stations set distance = '72' where id = 5;
+
+alter table train_stations add distance varchar(4);
+
+alter table train drop column fare;
