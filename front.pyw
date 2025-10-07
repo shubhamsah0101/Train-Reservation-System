@@ -167,8 +167,8 @@ class loginWindow:
             i += 1  
 
         # password show button
-        passShow = tk.Button(self.sign, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPass)
-        passShow.place(x=1010, y=390)
+        self.passShow = tk.Button(self.sign, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPass)
+        self.passShow.place(x=1010, y=390)
 
         # sign in button (save user data into database)
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
@@ -198,9 +198,11 @@ class loginWindow:
         if self.entry2["Password"].cget("show") == "*":
             self.entry2["Password"].config(show="")
             self.entry2["Confirm Password"].config(show="")
+            self.passShow.config(text="🚫")
         else:
             self.entry2["Password"].config(show="*")
             self.entry2["Confirm Password"].config(show="*")
+            self.passShow.config(text="👁")
 
     # save user info in database
     def save(self, event=None):         
