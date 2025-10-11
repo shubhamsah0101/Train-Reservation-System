@@ -781,7 +781,7 @@ class mainWindow:
         
         # headings = ["Train No.", "Train Name", "Depar"]
 
-        tk.Label(self.fmth, text="Train No.", font="lucida 14 bold", background="#ff6600").place(x=10, y=10)
+        # tk.Label(self.fmth, text="Train No.", font="lucida 14 bold", background="#ff6600").place(x=10, y=10)
 
     # search button function
     def search(self, event=None):
