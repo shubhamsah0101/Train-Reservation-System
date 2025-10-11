@@ -58,6 +58,10 @@ class loginWindow:
         self.password=tk.Entry(f1, font="lucida 14 bold", show="*")
         self.password.place(x=180, y=255)
 
+        # password show button in login page
+        self.passShowLP = tk.Button(f1, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPassLI)
+        self.passShowLP.place(x=420, y=247)
+
         # log in button
         loginBtn = tk.Button(f1, text="Log in", font="licida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.login)
         loginBtn.place(x=180, y=320)
@@ -99,6 +103,16 @@ class loginWindow:
             new_root.mainloop()
         else:
             tmsg.showerror("ERROR", "Invalid Password. TRY AGAIN...")
+
+    # password visibility in login window
+    def showPassLI(self, event=None):
+
+        if self.password.cget("show") == "*":
+            self.password.config(show="")
+            self.passShowLP.config(text="🚫")
+        else:
+            self.password.config(show="*")
+            self.passShowLP.config(text="👁")
 
         
     # Signin button event
@@ -167,8 +181,8 @@ class loginWindow:
             i += 1  
 
         # password show button
-        self.passShow = tk.Button(self.sign, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPass)
-        self.passShow.place(x=1010, y=390)
+        self.passShowSP = tk.Button(self.sign, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPass)
+        self.passShowSP.place(x=1010, y=390)
 
         # sign in button (save user data into database)
         signBtn=tk.Button(self.sign, text="Sign up", font="lucida 16 bold", padx=20, pady=5, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.save)
@@ -198,11 +212,11 @@ class loginWindow:
         if self.entry2["Password"].cget("show") == "*":
             self.entry2["Password"].config(show="")
             self.entry2["Confirm Password"].config(show="")
-            self.passShow.config(text="🚫")
+            self.passShowSP.config(text="🚫")
         else:
             self.entry2["Password"].config(show="*")
             self.entry2["Confirm Password"].config(show="*")
-            self.passShow.config(text="👁")
+            self.passShowSP.config(text="👁")
 
     # save user info in database
     def save(self, event=None):         
@@ -538,6 +552,10 @@ class profile:
         self.pwdEty = tk.Entry(self.fm, font="lucida 20 bold", show="*")
         self.pwdEty.place(x=400, y=100)
 
+        # password show button
+        self.passShowUP = tk.Button(self.fm, text="👁", font="lucida 16 bold", padx=10, pady=2, bg="#ff6600", fg="white", activebackground="#e65c00", activeforeground="white", cursor="hand2", command=self.showPassUP)
+        self.passShowUP.place(x=750, y=140)
+
         # confirm password
         self.cpwd = tk.Label(self.fm, text="Confirm Password : ", font="lucida 16 bold", padx=10, pady=5, bg="#ffdab9", fg="#333333", anchor="center")
         self.cpwd.place(x=100, y=200)
@@ -555,6 +573,17 @@ class profile:
         bkBtn.place(x=600, y=550)   
         bkBtn.bind("<Return>", self.back)    
         
+    # password visibility in signup window
+    def showPassUP(self, event=None):
+
+        if self.pwdEty.cget("show") == "*":
+            self.pwdEty.config(show="")
+            self.cpwdEty.config(show="")
+            self.passShowUP.config(text="🚫")
+        else:
+            self.pwdEty.config(show="*")
+            self.cpwdEty.config(show="*")
+            self.passShowUP.config(text="👁")
 
     # save user's updated password in database
     def savePass(self, event=None):
@@ -596,8 +625,8 @@ class mainWindow:
     def __init__(self, root, username):
         
         self.root = root
-        self.username = username
-        # self.username = "Shubham1"
+        # self.username = username
+        self.username = "Shubham1"
 
         # title
         self.root.title("Main Menu")
@@ -800,7 +829,7 @@ class mainWindow:
 # testing
 
 root = tk.Tk()
-app = loginWindow(root)
+# app = loginWindow(root)
 # app.signup()
-# app = mainWindow(root, "Shubham")                                    
+app = mainWindow(root, "Shubham")                                    
 root.mainloop()
