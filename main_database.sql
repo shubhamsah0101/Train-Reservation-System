@@ -36,8 +36,8 @@ select * from train;
 
 select * from train_stations;
 
-update train_stations set distance = '72' where id = 5;
+update train_stations set distance = '157' where id = 12;
 
-alter table train_stations add distance varchar(4);
+alter table train add avg_speed float;
 
-alter table train drop column fare;
+update train set source_station = 'Ranchi' where train_no = '13319';

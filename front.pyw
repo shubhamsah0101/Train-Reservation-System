@@ -772,8 +772,16 @@ class mainWindow:
         self.srhBtn.place(x=1000, y=25)
 
         # frame to show available trains
-        fmt = tk.Frame(self.f2, relief="ridge", background="#fff5e6", width=1155, height=340)
-        fmt.place(x=10, y=180)
+        self.fmt = tk.Frame(self.f2, relief="ridge", background="#fff5e6", width=1155, height=340)
+        self.fmt.place(x=10, y=180)
+
+        # frame to show available trains(heading)
+        self.fmth= tk.Frame(self.fmt, relief="ridge", background="#ff6600", width=1135, height=50)
+        self.fmth.place(x=10, y=10)
+        
+        # headings = ["Train No.", "Train Name", "Depar"]
+
+        tk.Label(self.fmth, text="Train No.", font="lucida 14 bold", background="#ff6600").place(x=10, y=10)
 
     # search button function
     def search(self, event=None):
@@ -791,11 +799,6 @@ class mainWindow:
         elif self.src == self.dst:
             tmsg.showerror('ERROR', 'Souece and Destination should not be same.\nTry Again...')
             return
-        
-        
-        
-
-
 
         print(self.src)
         print(self.dst)
